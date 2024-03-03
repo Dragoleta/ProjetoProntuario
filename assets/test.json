@@ -1,0 +1,179 @@
+{
+    "adm": {
+        "folderID": "",
+        "patients": {
+            "123456": {
+                "name": "123456",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {
+                    "06.02.2024": {
+                        "text": "Primeira sessao to 123456s"
+                    }
+                }
+            },
+            "Algusto": {
+                "name": "Algusto",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            },
+            "Pedro": {
+                "name": "Pedro",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            },
+            "Vanessa": {
+                "name": "Vanessa",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            },
+            "ihoioih": {
+                "name": "ihoioih",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            },
+            "patient.name": {
+                "name": "sdfsdfsdfsd",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            },
+            "sdfsdfsdfsd": {
+                "name": "sdfsdfsdfsd",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            }
+        }
+    },
+    "adre": {},
+    "ades": {
+        "folderID": "",
+        "patients": {
+            "Amanda": {
+                "name": "Amanda",
+                "birth_date": "31.07.2010",
+                "sex": "F",
+                "parents": [
+                    "Predo",
+                    "Nick minaj"
+                ],
+                "diagnose": "TDAH",
+                "folderID": "",
+                "history": {}
+            },
+            "amanda": {
+                "name": "amanda",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {
+                    "06.02.2024": {
+                        "text": "Amanda"
+                    }
+                }
+            },
+            "rogerio": {
+                "name": "rogerio",
+                "birth_date": "31.07.2010",
+                "sex": "M",
+                "parents": [
+                    "Fabio",
+                    "Aurora"
+                ],
+                "diagnose": "TDAH e Autismo",
+                "folderID": "",
+                "history": {
+                    "02.02.2024": {
+                        "text": "Fizemos brincadeiras para atencao e tivemos melhora em tal"
+                    },
+                    "03.02.2024": {
+                        "text": "Agr sim"
+                    },
+                    "06.02.2024": {
+                        "text": "JDoisjdisajdiasjd aq"
+                    }
+                }
+            },
+            "sad": {
+                "name": "sad",
+                "birth_date": "05.04.2010",
+                "sex": "M",
+                "parents": [
+                    "amanda",
+                    "rogerio"
+                ],
+                "diagnose": "Autismo",
+                "folderID": "",
+                "history": {}
+            },
+            "zzzzas": {
+                "name": "zzzzas",
+                "birth_date": "31.07.2010",
+                "sex": "M",
+                "parents": [
+                    "Fabio",
+                    "Aurora"
+                ],
+                "diagnose": "TDAH e Autismo",
+                "folderID": "",
+                "history": {
+                    "02.02.2024": {
+                        "text": "Fizemos brincadeiras para atencao e tivemos melhora em tal"
+                    }
+                }
+            }
+        }
+    }
+}
