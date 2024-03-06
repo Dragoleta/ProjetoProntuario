@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -37,8 +38,15 @@ class SignInPage extends StatelessWidget {
 
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
+
+      var response = await fetchAlbum();
+      print('Banana $response');
     } catch (e) {
       print('Error $e');
     }
+  }
+
+  Future<http.Response> fetchAlbum() {
+    return http.get(Uri.parse('http://127.0.0.1:8000/Health'));
   }
 }

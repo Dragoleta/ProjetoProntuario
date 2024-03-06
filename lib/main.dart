@@ -5,6 +5,7 @@ import "package:prontuario_flutter/pages/addPatientPage.dart";
 import "package:prontuario_flutter/pages/appointmentHistory.dart";
 import "package:prontuario_flutter/pages/patientPage.dart";
 import "package:prontuario_flutter/pages/patientsPage.dart";
+import "package:prontuario_flutter/pages/signInPage.dart";
 import "package:prontuario_flutter/pages/workplacePage.dart";
 
 void main() async {
@@ -21,9 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: WorkPlacePage(
-        localStorage: storage,
-      ),
+      home: const SignInPage(),
       routes: {
         '/workplaces': (context) => WorkPlacePage(
               localStorage: storage,
