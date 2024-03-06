@@ -37,10 +37,8 @@ class SignInPage extends StatelessWidget {
 
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
-
-      print('banana idToken ${googleSignInAuthentication.accessToken}');
     } catch (e) {
-      print('Banana Error $e');
+      print('Error $e');
     }
   }
 }
