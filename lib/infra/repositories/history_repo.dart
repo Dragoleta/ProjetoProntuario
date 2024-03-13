@@ -24,8 +24,8 @@ class HistoryRepo {
         maps.length, (index) => PatientHistory.fromJson(maps[index]));
   }
 
-  Future<List<PatientHistory>?> getHistoryFromPatient(int patientId) async {
-    if (patientId <= 0) {
+  Future<List<PatientHistory>?> getHistoryFromPatient(String patientId) async {
+    if ("" == patientId) {
       return null;
     }
     final db = await Connection().getDB();

@@ -1,5 +1,6 @@
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
+import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 
 class LocalStorage {
@@ -7,8 +8,8 @@ class LocalStorage {
   late Patient currentPatient;
   late Patient patientCreation;
   late PatientHistory currentHistory;
-
-  late int currentProfessinal;
+  late User currentProfessinal;
+  late String authToken;
 
   Workplace getCurrentPlace() {
     return currentPlace;
@@ -34,13 +35,17 @@ class LocalStorage {
     patientCreation = patient;
   }
 
-  int getCurrentProfessional() {
-//TODO: change this to be set on login
-    return 1;
+  String getCurrentProfessionalId() {
+    return currentProfessinal.id ?? '';
   }
 
-  void setCurrentProfessional(int professional) {
+  User getCurrentProfessional() {
+    return currentProfessinal;
+  }
+
+  void setCurrentProfessional(User professional) {
     currentProfessinal = professional;
+    print('banana user set');
   }
 
   PatientHistory getCurrentAppointment() {
@@ -49,5 +54,14 @@ class LocalStorage {
 
   void setCurrentAppointment(PatientHistory appointment) {
     currentHistory = appointment;
+  }
+
+  void setActiveAuthToken(String token) {
+    authToken = token;
+    print('banana token set');
+  }
+
+  String getActiveAuthToken() {
+    return authToken;
   }
 }
