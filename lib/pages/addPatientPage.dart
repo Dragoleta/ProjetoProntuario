@@ -3,7 +3,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/infra/repositories/patients_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AddPatientPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -18,14 +18,15 @@ class AddPatientPage extends StatefulWidget {
 class _AddPatientPageState extends State<AddPatientPage> {
   @override
   Widget build(BuildContext context) {
-    var currenProfessinalId = widget.localStorage.getCurrentProfessional();
+    var currentProfessinalId = widget.localStorage.getCurrentProfessional();
     Workplace? workplace = widget.localStorage.getCurrentPlace();
 
     List patientFields = Patient().getPatientsList();
     // Workplace? workplace = widget.localStorage.getCurrentPlace();
-    Patient toBePatient =
-        Patient(workplaceID: workplace.id, professinalID: currenProfessinalId);
-    widget.localStorage.setPatientCreation(toBePatient);
+
+    // Patient toBePatient =
+    //     Patient(workplaceID: workplace.id, professinalID: currentProfessinalId);
+    // widget.localStorage.setPatientCreation(toBePatient);
     return Scaffold(
       appBar: customAppBar(
         context,

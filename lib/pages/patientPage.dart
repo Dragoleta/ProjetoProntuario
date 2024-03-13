@@ -3,8 +3,8 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
-import 'package:prontuario_flutter/stuff/history_card.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:prontuario_flutter/widgets/history_card.dart';
 
 class PatientPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -49,7 +49,7 @@ class _PatientPageState extends State<PatientPage> {
   FutureBuilder<List<PatientHistory>?> patientsHistoryCardBuilder(
       LocalStorage storage) {
     Patient currentPatient = storage.getCurrentPatient();
-    int patientID = currentPatient.id ?? 0;
+    String patientID = currentPatient.id ?? '';
     return FutureBuilder<List<PatientHistory>?>(
       future: HistoryRepo().getHistoryFromPatient(patientID),
       builder: (context, AsyncSnapshot<List<PatientHistory>?> snapshot) {

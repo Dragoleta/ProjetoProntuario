@@ -4,7 +4,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AddAppointmentPage extends StatefulWidget {
   final LocalStorage localStorage;

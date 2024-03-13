@@ -10,18 +10,21 @@ class Connection {
   }
 
   _onCreate(db, version) async {
-    // await db.execute(_users);
+    await db.execute(_user);
     await db.execute(_workplaces);
     await db.execute(_patients);
     await db.execute(_history);
   }
 
-  String get _users => '''
-    CREATE TABLE users(
-      id integer PRIMARY KEY AUTOINCREMENT,
+  String get _user => '''
+    CREATE TABLE user(
+      id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
-      email TEXT 
-    )
+      email TEXT NOT NULL,
+      phoneNumber TEXT,
+      createdAt TEXT,
+      deleted BOOL
+      )
   ''';
 
   String get _workplaces => '''

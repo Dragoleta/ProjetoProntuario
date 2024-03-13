@@ -4,8 +4,8 @@ import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
 import 'package:prontuario_flutter/infra/repositories/patients_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
-import 'package:prontuario_flutter/stuff/patients_card.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:prontuario_flutter/widgets/patients_card.dart';
 
 class PatientsPage extends StatefulWidget {
   final LocalStorage localStorage;

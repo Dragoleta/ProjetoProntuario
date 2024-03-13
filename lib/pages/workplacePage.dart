@@ -1,9 +1,7 @@
 import "package:flutter/material.dart";
 import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
-import "package:prontuario_flutter/infra/models/workplace.dart";
-import "package:prontuario_flutter/infra/repositories/workplaces_repo.dart";
-import "package:prontuario_flutter/stuff/appbar.dart";
-import "package:prontuario_flutter/stuff/workplace_card.dart";
+import "package:prontuario_flutter/infra/models/user.dart";
+import "package:prontuario_flutter/widgets/appbar.dart";
 
 class WorkPlacePage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -21,6 +19,7 @@ bool __addPressed = false;
 class _WorkPlacePageState extends State<WorkPlacePage> {
   @override
   Widget build(BuildContext context) {
+    User currentUser = widget.localStorage.getCurrentProfessional();
     return Scaffold(
         appBar: customAppBar(context, actionButtonFuntion: () {
           __addPressed = true;
@@ -36,46 +35,45 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
               return const SizedBox();
             }),
             Expanded(
-              child: workplacesCardsBuilder(widget.localStorage),
-            ),
+                // child: workplacesCardsBuilder(widget.localStorage),
+                child: Text('Being worked on ${currentUser.name}')),
           ],
         ));
   }
 }
 
-FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
-    LocalStorage localStorage) {
-  return FutureBuilder<List<Workplace>?>(
-    future: WorkplaceRepo().getAllWorkplaces(),
-    builder: (context, AsyncSnapshot<List<Workplace>?> snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasData) {
-        if (snapshot.data == null) {
-          return const Text('No workplaces');
-        }
-
-        return ListView.builder(
-          itemCount: snapshot.data?.length,
-          itemBuilder: (context, index) {
-            return WorkplaceCard(
-              storage: localStorage,
-              place: snapshot.data![index],
-              delete: () {
-                // TODO: Add func to remove from txt and json
-                WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
-                Navigator.of(context).pop();
-                Navigator.of(context).pushNamed('/workplaces');
-              },
-            );
-          },
-        );
-      } else {
-        return const Text('Nothing here ');
-      }
-    },
-  );
-}
+// FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
+//     LocalStorage localStorage) {
+//   return FutureBuilder<List<Workplace>?>(
+//     future: WorkplaceRepo().getAllWorkplaces(),
+//     builder: (context, AsyncSnapshot<List<Workplace>?> snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return const CircularProgressIndicator();
+//       } else if (snapshot.hasData) {
+//         if (snapshot.data == null) {
+//           return const Text('No workplaces');
+//         }
+//         return ListView.builder(
+//           itemCount: snapshot.data?.length,
+//           itemBuilder: (context, index) {
+//             return WorkplaceCard(
+//               storage: localStorage,
+//               place: snapshot.data![index],
+//               delete: () {
+//                 // TODO: change to remove from api
+//                 // WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
+//                 Navigator.of(context).pop();
+//                 Navigator.of(context).pushNamed('/workplaces');
+//               },
+//             );
+//           },
+//         );
+//       } else {
+//         return const Text('Nothing here ');
+//       }
+//     },
+//   );
+// }
 
 // ignore: camel_case_types
 class addPlaceCard extends StatelessWidget {
@@ -85,13 +83,14 @@ class addPlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int professinalId = localStorage.getCurrentProfessional();
+    String professinalId = localStorage.getCurrentProfessionalId();
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: TextField(
         onSubmitted: (e) {
-          Workplace newPlace = Workplace(name: e, professinalID: professinalId);
-          WorkplaceRepo().addWorkplace(newPlace);
+          // Workplace newPlace = Workplace(name: e, professinalID: professinalId);
+          // TODO: change to get workplaces from api
+          // WorkplaceRepo().addWorkplace(newPlace);
           __addPressed = false;
 
           Navigator.of(context).pop();

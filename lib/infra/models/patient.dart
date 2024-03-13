@@ -1,7 +1,7 @@
 class Patient {
-  int? id;
-  int? professinalID;
-  int? workplaceID;
+  String? id;
+  String? professinalID;
+  String? workplaceID;
   String? name;
   String? diagnose;
   String? birthdate;
