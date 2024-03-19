@@ -20,7 +20,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    Patient patient = widget.localStorage.getCurrentPatient();
+    Patient? patient = widget.localStorage.getCurrentPatient();
     return Scaffold(
       appBar: customAppBar(
         context,
@@ -75,7 +75,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                       onPressed: () {
                         PatientHistory history = PatientHistory(
                             text: _appointment.text,
-                            patientId: patient.id,
+                            patientId: patient?.id,
                             appointmentDate: _date.text);
                         HistoryRepo().addHistory(history);
                         Navigator.of(context).pop();

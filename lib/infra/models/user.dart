@@ -2,11 +2,11 @@ import 'dart:convert';
 
 class User {
   String? id;
-  final String name;
-  final String email;
-  final String? phoneNumber;
-  final DateTime? createdAt;
-  final bool? deleted;
+  String name;
+  String email;
+  String? phoneNumber;
+  DateTime? createdAt;
+  bool? deleted;
 
   User({
     this.id,

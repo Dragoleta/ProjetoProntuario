@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:prontuario_flutter/helpers/login.dart';
 import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
@@ -20,7 +21,7 @@ class SignInPage extends StatelessWidget {
               const Text('Google sign in'),
               ElevatedButton(
                   onPressed: () {
-                    logOrSign(localStorage, context);
+                    signIn(localStorage, context);
                   },
                   child: const Text('Sign in with google'))
             ],
@@ -32,10 +33,9 @@ class SignInPage extends StatelessWidget {
 
   Future logOrSign(LocalStorage storage, context) async {
     try {
-      User? userFromLocalDB = await UserRepo().getUserFromLocalDB();
-
-      if (null != userFromLocalDB) {
-        login(userFromLocalDB, localStorage, context);
+      bool hasData = await checkHasProfessinal(storage);
+      if (true != hasData) {
+        loginHelper(storage);
       } else {
         signIn(storage, context);
       }
@@ -47,17 +47,14 @@ class SignInPage extends StatelessWidget {
     }
   }
 
-  void login(User user, LocalStorage storage, context) async {
-    var response = await loginApi(user);
-    storage.setCurrentProfessional(user);
-    storage.setActiveAuthToken(response);
-    Navigator.of(context).pushNamed('/workplaces');
-  }
-
   void signIn(LocalStorage storage, context) async {
     final GoogleSignIn signIn = GoogleSignIn();
 
     final GoogleSignInAccount? googleSignInAccount = await signIn.signIn();
+
+    if (googleSignInAccount == null) {
+      print("banana null");
+    }
 
     User user = User(
       id: googleSignInAccount!.id,
@@ -68,7 +65,8 @@ class SignInPage extends StatelessWidget {
     UserRepo().addUser(user);
     bool res = await createUser(user);
     if (true == res) {
-      login(user, storage, context);
+      storage.setCurrentProfessional(user);
+      loginHelper(storage);
     }
   }
 }

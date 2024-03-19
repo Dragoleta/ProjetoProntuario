@@ -1,17 +1,19 @@
+import 'dart:convert';
+
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 
 class LocalStorage {
-  late Workplace currentPlace;
-  late Patient currentPatient;
-  late Patient patientCreation;
-  late PatientHistory currentHistory;
-  late User currentProfessinal;
-  late String authToken;
+  Workplace? currentPlace;
+  Patient? currentPatient;
+  Patient? patientCreation;
+  PatientHistory? currentHistory;
+  User? currentProfessional;
+  List<String>? authToken;
 
-  Workplace getCurrentPlace() {
+  Workplace? getCurrentPlace() {
     return currentPlace;
   }
 
@@ -19,7 +21,7 @@ class LocalStorage {
     currentPlace = workplace;
   }
 
-  Patient getCurrentPatient() {
+  Patient? getCurrentPatient() {
     return currentPatient;
   }
 
@@ -27,7 +29,7 @@ class LocalStorage {
     currentPatient = patient;
   }
 
-  Patient getPatientCreation() {
+  Patient? getPatientCreation() {
     return patientCreation;
   }
 
@@ -35,20 +37,19 @@ class LocalStorage {
     patientCreation = patient;
   }
 
-  String getCurrentProfessionalId() {
-    return currentProfessinal.id ?? '';
+  String? getCurrentProfessionalId() {
+    return currentProfessional?.id ?? '';
   }
 
-  User getCurrentProfessional() {
-    return currentProfessinal;
+  User? getCurrentProfessional() {
+    return currentProfessional;
   }
 
   void setCurrentProfessional(User professional) {
-    currentProfessinal = professional;
-    print('banana user set');
+    currentProfessional = professional;
   }
 
-  PatientHistory getCurrentAppointment() {
+  PatientHistory? getCurrentAppointment() {
     return currentHistory;
   }
 
@@ -57,11 +58,18 @@ class LocalStorage {
   }
 
   void setActiveAuthToken(String token) {
-    authToken = token;
-    print('banana token set');
+    Map<String, dynamic> responseJson = jsonDecode(token);
+    String accessToken = responseJson['access_token'];
+    String tokenType = responseJson['token_type'];
+    authToken = [accessToken, tokenType];
   }
 
-  String getActiveAuthToken() {
-    return authToken;
+  List<String>? getActiveAuthToken() {
+    try {
+      return authToken;
+    } catch (e) {
+      print('banana $e');
+      return null;
+    }
   }
 }
