@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 class Workplace {
-  int? id;
-  final String name;
-  final int professinalID;
-  final DateTime? createdAt;
-  final bool? deleted;
+  String? id;
+  String name;
+  String professional_Id;
+  String? createdAt;
+  bool? deleted;
 
   Workplace({
     this.id,
     required this.name,
-    required this.professinalID,
+    required this.professional_Id,
     this.createdAt,
     this.deleted,
   });
@@ -18,8 +18,8 @@ class Workplace {
   factory Workplace.fromJson(Map<String, dynamic> json) => Workplace(
         id: json['id'],
         name: json['name'],
-        professinalID: json['professinal_id'],
-        createdAt: json['createdAt'],
+        professional_Id: json['professional_id'],
+        createdAt: json['created_at'],
         deleted: json['deleted'],
       );
 
@@ -27,7 +27,7 @@ class Workplace {
     return jsonEncode(<String, dynamic>{
       "id": id,
       "name": name,
-      'professinal_id': professinalID,
+      'professional_id': professional_Id,
       if (createdAt != null) "createdAt": createdAt,
       if (deleted != null) "deleted": deleted
     });

@@ -17,7 +17,7 @@ class PatientPage extends StatefulWidget {
 class _PatientPageState extends State<PatientPage> {
   @override
   Widget build(BuildContext context) {
-    Patient currentPatient = widget.localStorage.getCurrentPatient();
+    Patient? currentPatient = widget.localStorage.getCurrentPatient();
     Size size = MediaQuery.of(context).size;
     List patientFields = Patient().getPatientsList();
 
@@ -30,7 +30,7 @@ class _PatientPageState extends State<PatientPage> {
 
           setState(() {});
         },
-        appbarTitle: currentPatient.name ?? 'Patient',
+        appbarTitle: currentPatient?.name ?? 'Patient',
         iconType: 0,
       ),
       body: Column(
@@ -48,8 +48,8 @@ class _PatientPageState extends State<PatientPage> {
 
   FutureBuilder<List<PatientHistory>?> patientsHistoryCardBuilder(
       LocalStorage storage) {
-    Patient currentPatient = storage.getCurrentPatient();
-    String patientID = currentPatient.id ?? '';
+    Patient? currentPatient = storage.getCurrentPatient();
+    String patientID = currentPatient!.id ?? '';
     return FutureBuilder<List<PatientHistory>?>(
       future: HistoryRepo().getHistoryFromPatient(patientID),
       builder: (context, AsyncSnapshot<List<PatientHistory>?> snapshot) {

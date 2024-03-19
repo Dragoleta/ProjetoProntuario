@@ -5,7 +5,8 @@ class PatientsRepo {
   Future<int> addPatient(Patient patient) async {
     try {
       final db = await Connection().getDB();
-      return await db.insert('patients', patient.toJSON());
+      return await db.insert(
+          'patients', patient.toJSON() as Map<String, Object?>);
     } catch (e) {
       print('Error $e');
       return 2;
@@ -32,7 +33,8 @@ class PatientsRepo {
     return List.generate(maps.length, (index) => Patient.fromJson(maps[index]));
   }
 
-  Future<List<Patient>?> getAllPatientsFromWorkplace(int? workplaceId) async {
+  Future<List<Patient>?> getAllPatientsFromWorkplace(
+      String? workplaceId) async {
     final db = await Connection().getDB();
 
     String query = 'SELECT * FROM patients WHERE workplace_id=$workplaceId';

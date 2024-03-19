@@ -5,7 +5,6 @@ class UserRepo {
   Future<Object> addUser(User user) async {
     try {
       final db = await Connection().getDB();
-      print('banana addind ${user.name}');
       return await db.insert('user', user.toJSON());
     } catch (e) {
       print('Error banana ADDUSER $e');

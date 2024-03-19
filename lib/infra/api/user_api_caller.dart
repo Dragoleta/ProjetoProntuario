@@ -24,7 +24,8 @@ Future<String> loginApi(User user) async {
       print('Failed to retrieve the http package!');
       return '';
     }
-    return res.body.toString();
+
+    return res.body;
   } catch (e) {
     print('Banana $e');
     return 'error';
