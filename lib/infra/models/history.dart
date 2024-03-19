@@ -1,8 +1,8 @@
 class PatientHistory {
-  int? id;
-  late int? patientId;
-  late String text;
-  late String appointmentDate;
+  String? id;
+  String? patientId;
+  String? text;
+  String? appointmentDate;
 
   PatientHistory(
       {this.id,

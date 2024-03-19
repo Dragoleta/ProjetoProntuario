@@ -6,7 +6,8 @@ class WorkplaceRepo {
     print('banana repo');
     try {
       final db = await Connection().getDB();
-      return await db.insert('workplaces', workplace.toJSON());
+      return await db.insert(
+          'workplaces', workplace.toJSON() as Map<String, Object?>);
     } catch (e) {
       print('Error $e');
     }
@@ -18,7 +19,7 @@ class WorkplaceRepo {
       final db = await Connection().getDB();
       return await db.delete('workplaces',
           where:
-              'professinal_id=${workplace.professinalID} AND id=${workplace.id}');
+              'professinal_id=${workplace.professional_Id} AND id=${workplace.id}');
     } catch (e) {
       print('Errr $e');
     }

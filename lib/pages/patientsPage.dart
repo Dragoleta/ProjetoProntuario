@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/patients_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
-import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
-import 'package:prontuario_flutter/infra/repositories/patients_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
-import 'package:prontuario_flutter/stuff/patients_card.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:prontuario_flutter/widgets/patients_card.dart';
 
 class PatientsPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -27,7 +26,7 @@ class _PatientsPageState extends State<PatientsPage> {
             Navigator.of(context).pushNamed('/patients/add');
             setState(() {});
           },
-          appbarTitle: workplace.name,
+          appbarTitle: workplace!.name,
           iconType: 0,
         ),
         backgroundColor: Colors.grey,
@@ -40,8 +39,10 @@ class _PatientsPageState extends State<PatientsPage> {
 
   FutureBuilder<List<Patient>?> patientsCardsBuilder(LocalStorage storage) {
     Workplace? workplace = storage.getCurrentPlace();
+    List<String>? token = storage.getActiveAuthToken();
+
     return FutureBuilder<List<Patient>?>(
-      future: PatientsRepo().getAllPatientsFromWorkplace(workplace.id),
+      future: getAllPatients(token),
       builder: (context, AsyncSnapshot<List<Patient>?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -52,13 +53,16 @@ class _PatientsPageState extends State<PatientsPage> {
           return ListView.builder(
             itemCount: snapshot.data?.length,
             itemBuilder: (context, index) {
+              if (workplace!.id != snapshot.data![index].workplaceID) {
+                return const SizedBox(height: 0);
+              }
               return PatientCard(
                 storage: storage,
                 patient: snapshot.data![index],
                 delete: () async {
-                  HistoryRepo()
-                      .deleteAllUsersAppointments(snapshot.data![index]);
-                  PatientsRepo().deletePatientFromDb(snapshot.data![index]);
+                  // HistoryRepo()
+                  //     .deleteAllUsersAppointments(snapshot.data![index]);
+                  // PatientsRepo().deletePatientFromDb(snapshot.data![index]);
                   setState(() {});
                 },
               );

@@ -4,7 +4,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AddAppointmentPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -20,7 +20,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    Patient patient = widget.localStorage.getCurrentPatient();
+    Patient? patient = widget.localStorage.getCurrentPatient();
     return Scaffold(
       appBar: customAppBar(
         context,
@@ -75,7 +75,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                       onPressed: () {
                         PatientHistory history = PatientHistory(
                             text: _appointment.text,
-                            patientId: patient.id,
+                            patientId: patient?.id,
                             appointmentDate: _date.text);
                         HistoryRepo().addHistory(history);
                         Navigator.of(context).pop();

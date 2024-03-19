@@ -3,7 +3,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/infra/repositories/patients_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AddPatientPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -18,13 +18,13 @@ class AddPatientPage extends StatefulWidget {
 class _AddPatientPageState extends State<AddPatientPage> {
   @override
   Widget build(BuildContext context) {
-    var currenProfessinalId = widget.localStorage.getCurrentProfessional();
+    var currentProfessional = widget.localStorage.getCurrentProfessional();
     Workplace? workplace = widget.localStorage.getCurrentPlace();
 
     List patientFields = Patient().getPatientsList();
-    // Workplace? workplace = widget.localStorage.getCurrentPlace();
-    Patient toBePatient =
-        Patient(workplaceID: workplace.id, professinalID: currenProfessinalId);
+
+    Patient toBePatient = Patient(
+        workplaceID: workplace?.id, professional_Id: currentProfessional?.id);
     widget.localStorage.setPatientCreation(toBePatient);
     return Scaffold(
       appBar: customAppBar(
@@ -53,8 +53,8 @@ class _AddPatientPageState extends State<AddPatientPage> {
               child: const Text('Continue'),
               onPressed: () {
                 Patient? patient = widget.localStorage.getPatientCreation();
-                if (patient.name != null) {
-                  PatientsRepo().addPatient(patient);
+                if (null != patient?.name) {
+                  PatientsRepo().addPatient(patient!);
                 }
                 Navigator.of(context).pushNamed('/patients');
                 setState(() {});
@@ -100,22 +100,22 @@ class AddPatientCard extends StatelessWidget {
 
   void setToPatient(
       String currentField, String text, LocalStorage localStorage) {
-    Patient doingPatient = localStorage.getPatientCreation();
+    Patient? doingPatient = localStorage.getPatientCreation();
 
     if (currentField == 'name') {
-      doingPatient.name = text;
+      doingPatient?.name = text;
     } else if (currentField == 'sex') {
-      doingPatient.sex = text;
+      doingPatient!.sex = text;
     } else if (currentField == 'age') {
-      doingPatient.birthdate = text;
+      doingPatient!.birthdate = text;
     } else if (currentField == 'diagnose') {
-      doingPatient.diagnose = text;
+      doingPatient!.diagnose = text;
     } else if (currentField == "mother's name") {
-      doingPatient.motherName = text;
+      doingPatient!.motherName = text;
     } else if (currentField == "father's name") {
-      doingPatient.fatherName = text;
+      doingPatient!.fatherName = text;
     }
-
+    print('Banana ${doingPatient!.professional_Id}');
     localStorage.setPatientCreation(doingPatient);
   }
 }

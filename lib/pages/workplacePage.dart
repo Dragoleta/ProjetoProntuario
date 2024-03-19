@@ -1,24 +1,25 @@
 import "package:flutter/material.dart";
+import "package:prontuario_flutter/infra/api/workplaces_api_caller.dart";
 import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
 import "package:prontuario_flutter/infra/models/workplace.dart";
-import "package:prontuario_flutter/infra/repositories/workplaces_repo.dart";
-import "package:prontuario_flutter/stuff/appbar.dart";
-import "package:prontuario_flutter/stuff/workplace_card.dart";
+import "package:prontuario_flutter/widgets/appbar.dart";
+import "package:prontuario_flutter/widgets/workplace_card.dart";
 
-class WorkPlacePage extends StatefulWidget {
+class WorkplacePage extends StatefulWidget {
   final LocalStorage localStorage;
-  const WorkPlacePage({
+  const WorkplacePage({
     super.key,
     required this.localStorage,
   });
 
   @override
-  State<WorkPlacePage> createState() => _WorkPlacePageState();
+  State<WorkplacePage> createState() => _WorkplacePageState();
 }
 
 bool __addPressed = false;
+int __itemCount = 0;
 
-class _WorkPlacePageState extends State<WorkPlacePage> {
+class _WorkplacePageState extends State<WorkplacePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +32,7 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
           children: [
             Builder(builder: (context) {
               if (__addPressed == true) {
-                return addPlaceCard(localStorage: widget.localStorage);
+                return AddPlaceCard(localStorage: widget.localStorage);
               }
               return const SizedBox();
             }),
@@ -45,8 +46,10 @@ class _WorkPlacePageState extends State<WorkPlacePage> {
 
 FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
     LocalStorage localStorage) {
+  List<String>? token = localStorage.getActiveAuthToken();
+
   return FutureBuilder<List<Workplace>?>(
-    future: WorkplaceRepo().getAllWorkplaces(),
+    future: getAllWorkplaces(token),
     builder: (context, AsyncSnapshot<List<Workplace>?> snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const CircularProgressIndicator();
@@ -55,6 +58,7 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
           return const Text('No workplaces');
         }
 
+        __itemCount = snapshot.data!.length;
         return ListView.builder(
           itemCount: snapshot.data?.length,
           itemBuilder: (context, index) {
@@ -62,8 +66,8 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
               storage: localStorage,
               place: snapshot.data![index],
               delete: () {
-                // TODO: Add func to remove from txt and json
-                WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
+                // TODO: change to remove from api
+                // WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed('/workplaces');
               },
@@ -77,21 +81,26 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
   );
 }
 
-// ignore: camel_case_types
-class addPlaceCard extends StatelessWidget {
+class AddPlaceCard extends StatelessWidget {
   final LocalStorage localStorage;
 
-  const addPlaceCard({super.key, required this.localStorage});
+  const AddPlaceCard({super.key, required this.localStorage});
 
   @override
   Widget build(BuildContext context) {
-    int professinalId = localStorage.getCurrentProfessional();
+    String? professionalId = localStorage.getCurrentProfessionalId();
+    List<String>? authToken = localStorage.getActiveAuthToken();
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: TextField(
         onSubmitted: (e) {
-          Workplace newPlace = Workplace(name: e, professinalID: professinalId);
-          WorkplaceRepo().addWorkplace(newPlace);
+          int workplaceGenId = ((__itemCount + 1) * (__itemCount - 1));
+          Workplace newPlace = Workplace(
+              name: e,
+              professional_Id: professionalId!,
+              id: workplaceGenId.toString());
+          // WorkplaceRepo().addWorkplace(newPlace);
+          createWorkplace(newPlace, authToken);
           __addPressed = false;
 
           Navigator.of(context).pop();

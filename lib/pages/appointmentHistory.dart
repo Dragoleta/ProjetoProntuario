@@ -3,7 +3,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
-import 'package:prontuario_flutter/stuff/appbar.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AppointmentHistoryPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -18,8 +18,9 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    Patient currentPatient = widget.localStorage.getCurrentPatient();
-    PatientHistory currentHistory = widget.localStorage.getCurrentAppointment();
+    Patient? currentPatient = widget.localStorage.getCurrentPatient();
+    PatientHistory? currentHistory =
+        widget.localStorage.getCurrentAppointment();
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -32,7 +33,7 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
           switchWidget();
           setState(() {});
         },
-        appbarTitle: currentPatient.name ?? 'Patient',
+        appbarTitle: currentPatient?.name ?? 'Patient',
         iconType: 1,
       ),
       body: Column(
@@ -42,7 +43,7 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
             margin: const EdgeInsets.fromLTRB(20, 30, 20, 20),
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             width: size.width,
-            child: test2(size, currentHistory, widget.localStorage),
+            child: test2(size, currentHistory!, widget.localStorage),
           ),
           saveButton(currentHistory)
         ],
@@ -90,6 +91,6 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
         },
       );
     }
-    return Text(currentHistory.text);
+    return Text(currentHistory.text ?? '');
   }
 }
