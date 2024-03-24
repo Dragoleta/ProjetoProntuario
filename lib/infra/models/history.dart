@@ -13,14 +13,14 @@ class PatientHistory {
   factory PatientHistory.fromJson(Map<String, dynamic> json) => PatientHistory(
         id: json['id'],
         patientId: json['patient_id'],
-        appointmentDate: json['appointment_date'],
-        text: json['history_text'],
+        appointmentDate: json['created_at'],
+        text: json['text'],
       );
 
   Map<String, dynamic> toJSON() => {
         'id': id,
         'patient_id': patientId,
         'appointment_date': appointmentDate,
-        'history_text': text
+        'text': text
       };
 }

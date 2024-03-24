@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
-import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AppointmentHistoryPage extends StatefulWidget {
@@ -43,7 +42,7 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
             margin: const EdgeInsets.fromLTRB(20, 30, 20, 20),
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             width: size.width,
-            child: test2(size, currentHistory!, widget.localStorage),
+            child: textLocal(size, currentHistory!, widget.localStorage),
           ),
           saveButton(currentHistory)
         ],
@@ -64,8 +63,9 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     if (__activeWidget == 1) {
       return ElevatedButton(
         onPressed: () {
-          HistoryRepo().updateHistory(currentHistory);
-          print('banana ${currentHistory.text}');
+          // TODO: change this to call update api
+
+          // HistoryRepo().updateHistory(currentHistory);
           switchWidget();
           setState(() {});
         },
@@ -75,7 +75,8 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     return const SizedBox();
   }
 
-  Widget test2(size, PatientHistory currentHistory, LocalStorage localStorage) {
+  Widget textLocal(
+      size, PatientHistory currentHistory, LocalStorage localStorage) {
     if (__activeWidget == 1) {
       return TextField(
         controller: TextEditingController(text: currentHistory.text),

@@ -18,7 +18,7 @@ class PatientsPage extends StatefulWidget {
 class _PatientsPageState extends State<PatientsPage> {
   @override
   Widget build(BuildContext context) {
-    Workplace? workplace = widget.localStorage.getCurrentPlace();
+    Workplace? workplace = widget.localStorage.getCurrentWorkplace();
     return Scaffold(
         appBar: customAppBar(
           context,
@@ -38,7 +38,7 @@ class _PatientsPageState extends State<PatientsPage> {
   }
 
   FutureBuilder<List<Patient>?> patientsCardsBuilder(LocalStorage storage) {
-    Workplace? workplace = storage.getCurrentPlace();
+    Workplace? workplace = storage.getCurrentWorkplace();
     List<String>? token = storage.getActiveAuthToken();
 
     return FutureBuilder<List<Patient>?>(

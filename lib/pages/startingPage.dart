@@ -23,17 +23,17 @@ class _StartPageState extends State<StartPage> {
         child: ElevatedButton(
           child: const Text('Entrar'),
           onPressed: () async {
-            await checkHasProfessinal(widget.localStorage);
+            bool hasProfessional =
+                await checkHasProfessinal(widget.localStorage);
+
+            if (!hasProfessional) {
+              Navigator.popAndPushNamed(context, '/loginSignin');
+            }
 
             await loginHelper(widget.localStorage);
+            Navigator.popAndPushNamed(context, '/workplaces');
 
-            List<String>? token = widget.localStorage.getActiveAuthToken();
-            Navigator.of(context).pop();
-            if (token != null) {
-              Navigator.of(context).pushNamed('/workplaces');
-            } else {
-              Navigator.of(context).pushNamed('/loginSignin');
-            }
+            // List<String>? token = widget.localStorage.getActiveAuthToken();
           },
         ),
       ),

@@ -20,7 +20,7 @@ class _AddPatientPageV2State extends State<AddPatientPageV2> {
   @override
   Widget build(BuildContext context) {
     var currentprofessional = widget.localStorage.getCurrentProfessional();
-    Workplace? workplace = widget.localStorage.getCurrentPlace();
+    Workplace? workplace = widget.localStorage.getCurrentWorkplace();
 
     List patientFields = Patient().getPatientsList();
 

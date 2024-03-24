@@ -26,7 +26,7 @@ class WorkplaceCard extends StatelessWidget {
             GestureDetector(
               // Change this to go to the patients from this workplace and set lcoal storage to the place
               onTap: () {
-                storage.setCurrentPlace(place);
+                storage.setCurrentWorkplace(place);
                 Navigator.of(context).pushNamed('/patients');
               },
               child: Text(

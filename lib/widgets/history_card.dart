@@ -35,7 +35,7 @@ class PatientHistoryCard extends StatelessWidget {
               },
               // TODO: Change this to use a more non gambiara
               child: Text(
-                '${history.text}          ${history.appointmentDate}',
+                '${history.appointmentDate}          ${history.text}',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.grey[900],

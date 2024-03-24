@@ -68,8 +68,7 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
               delete: () {
                 // TODO: change to remove from api
                 // WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
-                Navigator.of(context).pop();
-                Navigator.of(context).pushNamed('/workplaces');
+                Navigator.of(context).popAndPushNamed('/workplaces');
               },
             );
           },
@@ -99,7 +98,6 @@ class AddPlaceCard extends StatelessWidget {
               name: e,
               professional_Id: professionalId!,
               id: workplaceGenId.toString());
-          // WorkplaceRepo().addWorkplace(newPlace);
           createWorkplace(newPlace, authToken);
           __addPressed = false;
 

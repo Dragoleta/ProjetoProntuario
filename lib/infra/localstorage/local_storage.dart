@@ -13,11 +13,11 @@ class LocalStorage {
   User? currentProfessional;
   List<String>? authToken;
 
-  Workplace? getCurrentPlace() {
+  Workplace? getCurrentWorkplace() {
     return currentPlace;
   }
 
-  void setCurrentPlace(Workplace workplace) {
+  void setCurrentWorkplace(Workplace workplace) {
     currentPlace = workplace;
   }
 

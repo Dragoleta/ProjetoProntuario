@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
+import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 import 'package:prontuario_flutter/widgets/history_card.dart';
@@ -48,10 +50,12 @@ class _PatientPageState extends State<PatientPage> {
 
   FutureBuilder<List<PatientHistory>?> patientsHistoryCardBuilder(
       LocalStorage storage) {
+    Workplace? workplace = storage.getCurrentWorkplace();
     Patient? currentPatient = storage.getCurrentPatient();
-    String patientID = currentPatient!.id ?? '';
+    var token = storage.getActiveAuthToken();
+
     return FutureBuilder<List<PatientHistory>?>(
-      future: HistoryRepo().getHistoryFromPatient(patientID),
+      future: getPatientHistory(token, workplace?.id),
       builder: (context, AsyncSnapshot<List<PatientHistory>?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -64,7 +68,7 @@ class _PatientPageState extends State<PatientPage> {
             itemBuilder: (context, index) {
               return PatientHistoryCard(
                 storage: storage,
-                patient: currentPatient,
+                patient: currentPatient!,
                 history: snapshot.data![index],
                 delete: () {
                   HistoryRepo().deleteAppointmentFromDb(snapshot.data![index]);

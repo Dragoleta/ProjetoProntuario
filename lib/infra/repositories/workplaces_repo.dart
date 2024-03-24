@@ -3,7 +3,6 @@ import 'package:prontuario_flutter/infra/models/workplace.dart';
 
 class WorkplaceRepo {
   Future<int> addWorkplace(Workplace workplace) async {
-    print('banana repo');
     try {
       final db = await Connection().getDB();
       return await db.insert(

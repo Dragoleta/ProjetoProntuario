@@ -5,11 +5,13 @@ import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
 
 Future<bool> loginHelper(LocalStorage storage) async {
   User? user = storage.getCurrentProfessional();
+
   if (null == user) {
-    print('Banana no current pro');
+    print('Banana no current professinal');
     return false;
   }
   var response = await loginApi(user);
+
   storage.setCurrentProfessional(user);
   storage.setActiveAuthToken(response);
   return true;
@@ -18,6 +20,7 @@ Future<bool> loginHelper(LocalStorage storage) async {
 Future<bool> checkHasProfessinal(LocalStorage storage) async {
   try {
     User? userFromLocalDB = await UserRepo().getUserFromLocalDB();
+
     if (null != userFromLocalDB) {
       storage.setCurrentProfessional(userFromLocalDB);
       return true;
@@ -25,7 +28,7 @@ Future<bool> checkHasProfessinal(LocalStorage storage) async {
       return false;
     }
   } catch (error) {
-    print('Banana error $error');
+    print('Banana Error $error');
     return false;
   }
 }
