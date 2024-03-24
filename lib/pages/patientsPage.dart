@@ -59,12 +59,6 @@ class _PatientsPageState extends State<PatientsPage> {
               return PatientCard(
                 storage: storage,
                 patient: snapshot.data![index],
-                delete: () async {
-                  // HistoryRepo()
-                  //     .deleteAllUsersAppointments(snapshot.data![index]);
-                  // PatientsRepo().deletePatientFromDb(snapshot.data![index]);
-                  setState(() {});
-                },
               );
             },
           );

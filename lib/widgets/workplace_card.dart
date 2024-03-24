@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/workplaces_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 
 // ignore: must_be_immutable
 class WorkplaceCard extends StatelessWidget {
   final Workplace place;
-  final VoidCallback delete;
   final LocalStorage storage;
-  const WorkplaceCard(
-      {super.key,
-      required this.place,
-      required this.delete,
-      required this.storage});
+  const WorkplaceCard({super.key, required this.place, required this.storage});
   // ignore: empty_constructor_bodies
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,16 @@ class WorkplaceCard extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.delete),
               color: Colors.red,
-              onPressed: delete,
+              onPressed: () async {
+                var authToken = storage.getActiveAuthToken();
+                if (authToken == null) {
+                  return;
+                }
+                bool? response = await deleteWorkplace(authToken, place.id);
+                if (response == true) {
+                  Navigator.of(context).popAndPushNamed('/workplaces');
+                }
+              },
               tooltip: "Delete this workplace",
             )
           ],

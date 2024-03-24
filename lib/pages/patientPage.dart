@@ -4,7 +4,6 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
-import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 import 'package:prontuario_flutter/widgets/history_card.dart';
 
@@ -28,7 +27,7 @@ class _PatientPageState extends State<PatientPage> {
       appBar: customAppBar(
         context,
         actionButtonFuntion: () async {
-          Navigator.of(context).pushNamed('/patients/patient/add');
+          Navigator.of(context).pushNamed('/patients/patient/addAppointment');
 
           setState(() {});
         },
@@ -70,10 +69,6 @@ class _PatientPageState extends State<PatientPage> {
                 storage: storage,
                 patient: currentPatient!,
                 history: snapshot.data![index],
-                delete: () {
-                  HistoryRepo().deleteAppointmentFromDb(snapshot.data![index]);
-                  setState(() {});
-                },
               );
             },
           );

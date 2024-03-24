@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:prontuario_flutter/infra/models/workplace.dart';
+import 'package:prontuario_flutter/infra/models/history.dart';
 
-Future<List<Workplace>?>? getAllWorkplaces(authToken) async {
+Future<List<PatientHistory>?>? getPatientHistory(authToken, workplaceId) async {
   try {
-    Uri url =
-        Uri.parse('${dotenv.env['API_URL']}/workplace/get_all_workplaces');
+    Uri url = Uri.parse(
+        '${dotenv.env['API_URL']}/history/get_patient_history?workplace_id=$workplaceId');
 
     http.Response res = await http.post(url,
         headers: <String, String>{
@@ -26,28 +26,28 @@ Future<List<Workplace>?>? getAllWorkplaces(authToken) async {
     }
     // Decodes and maps before returning the response
     final List<dynamic> parsed = jsonDecode(res.body);
-    List<Workplace> yourModels =
-        parsed.map((json) => Workplace.fromJson(json)).toList();
+    List<PatientHistory> yourModels =
+        parsed.map((json) => PatientHistory.fromJson(json)).toList();
+
     return yourModels;
   } catch (e) {
-    print('Banana Workplace $e');
     return null;
   }
 }
 
-Future<bool> createWorkplace(Workplace place, authToken) async {
+Future<bool> addPatientHistory(PatientHistory note, authToken) async {
   try {
-    print('Banana calling create place');
-
-    Uri url = Uri.parse('${dotenv.env['API_URL']}/workplace/add_workplace');
+    Uri url = Uri.parse('${dotenv.env['API_URL']}/history/add_patient_history');
+    print('Banana callin api addPatient');
 
     String request = jsonEncode(<String, dynamic>{
-      "workplace": {
-        "id": place.id,
-        "name": place.name,
-        "professional_id": place.professional_Id,
-        if (place.createdAt != null) "createdAt": place.createdAt,
-        if (place.deleted != null) "deleted": place.deleted
+      "patient_note": {
+        "text": note.text,
+        "workplace_id": note.workplaceId,
+        "patient_id": note.patientId,
+        "appointment_date": note.appointmentDate,
+        if (note.createdAt != null) "createdAt": note.createdAt,
+        if (note.deleted != null) "deleted": note.deleted
       },
       "authToken": {
         "access_token": authToken[0],
@@ -63,8 +63,10 @@ Future<bool> createWorkplace(Workplace place, authToken) async {
       body: request,
     );
 
+    print('Banana callin api with $request');
+
     if (res.statusCode != 200) {
-      print('banana Failed to retrieve the http package!');
+      print('banana Failed to retrieve the http package! ${res.body}');
       return false;
     }
     return true;
@@ -74,10 +76,10 @@ Future<bool> createWorkplace(Workplace place, authToken) async {
   }
 }
 
-Future<bool?> deleteWorkplace(authToken, workplaceId) async {
+Future<bool?> deletePatientHistory(authToken, patientHistoryId) async {
   try {
     Uri url = Uri.parse(
-        '${dotenv.env['API_URL']}/workplace/delete_workplace?workplace_id=$workplaceId');
+        '${dotenv.env['API_URL']}/history/delete_patient_history?patient_history_id=$patientHistoryId');
 
     http.Response res = await http.delete(url,
         headers: <String, String>{

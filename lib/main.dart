@@ -12,6 +12,7 @@ import "package:prontuario_flutter/pages/workplacePage.dart";
 
 void main() async {
   await dotenv.load(fileName: ".env");
+
   LocalStorage storage = LocalStorage();
 
   runApp(MyApp(storage: storage));
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
         '/patients/patient/appointment': (context) => AppointmentHistoryPage(
               localStorage: storage,
             ),
-        '/patients/patient/add': (context) => AddAppointmentPage(
+        '/patients/patient/addAppointment': (context) => AddAppointmentPage(
               localStorage: storage,
             ),
       },

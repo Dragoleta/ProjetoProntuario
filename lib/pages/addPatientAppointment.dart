@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
-import 'package:prontuario_flutter/infra/repositories/history_repo.dart';
+import 'package:prontuario_flutter/infra/models/user.dart';
+import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AddAppointmentPage extends StatefulWidget {
@@ -21,6 +23,10 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     Patient? patient = widget.localStorage.getCurrentPatient();
+    Workplace? workplace = widget.localStorage.getCurrentWorkplace();
+    User? professional = widget.localStorage.getCurrentProfessional();
+    var authToken = widget.localStorage.getActiveAuthToken();
+
     return Scaffold(
       appBar: customAppBar(
         context,
@@ -49,14 +55,13 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                       lastDate: DateTime(2100));
                   if (datePicked != null) {
                     setState(() {
-                      _date.text = DateFormat('dd.MM.yyyy').format(datePicked);
+                      _date.text = DateFormat('dd-MM-yyyy').format(datePicked);
                     });
                   }
                   if (datePicked == null) {
                     setState(() {
                       _date.text =
-                          DateFormat('dd.MM.yyyy').format(DateTime.now());
-                      debugPrint('banana');
+                          DateFormat('dd-MM-yyyy').format(DateTime.now());
                     });
                   }
                 },
@@ -72,13 +77,25 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                      onPressed: () {
-                        PatientHistory history = PatientHistory(
+                      onPressed: () async {
+                        try {
+                          PatientHistory historyNote = PatientHistory(
                             text: _appointment.text,
                             patientId: patient?.id,
-                            appointmentDate: _date.text);
-                        HistoryRepo().addHistory(history);
-                        Navigator.of(context).pop();
+                            workplaceId: workplace?.id,
+                            professionalId: professional?.id,
+                            deleted: false,
+                            appointmentDate: _date.text.toString(),
+                          );
+                          bool res =
+                              await addPatientHistory(historyNote, authToken);
+
+                          if (res == true) {
+                            Navigator.of(context).pop();
+                          }
+                        } catch (e) {
+                          print('Banana $e');
+                        }
                       },
                       child: const Text('Save history'))
                 ],

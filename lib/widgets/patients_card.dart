@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/patients_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 
 // ignore: must_be_immutable
 class PatientCard extends StatelessWidget {
   final Patient patient;
-  final VoidCallback delete;
   final LocalStorage storage;
-  const PatientCard(
-      {super.key,
-      required this.patient,
-      required this.delete,
-      required this.storage});
+  const PatientCard({super.key, required this.patient, required this.storage});
   // ignore: empty_constructor_bodies
   @override
   Widget build(BuildContext context) {
@@ -39,7 +35,17 @@ class PatientCard extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.delete),
               color: Colors.red,
-              onPressed: delete,
+              onPressed: () async {
+                var authToken = storage.getActiveAuthToken();
+
+                if (authToken == null) {
+                  return;
+                }
+                bool? response = await deletePatient(authToken, patient.id);
+                if (response == true) {
+                  Navigator.of(context).popAndPushNamed('/patients');
+                }
+              },
               tooltip: "Delete this patient",
             )
           ],

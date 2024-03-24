@@ -65,11 +65,6 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
             return WorkplaceCard(
               storage: localStorage,
               place: snapshot.data![index],
-              delete: () {
-                // TODO: change to remove from api
-                // WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
-                Navigator.of(context).popAndPushNamed('/workplaces');
-              },
             );
           },
         );
