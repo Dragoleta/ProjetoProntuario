@@ -21,7 +21,7 @@ Future<List<PatientHistory>?>? getPatientHistory(authToken, workplaceId) async {
         ));
 
     if (res.statusCode != 200) {
-      print('Failed to retrieve the http package! ${res.body}');
+      print('banana Failed to retrieve the http package! ${res.body}');
       return null;
     }
     // Decodes and maps before returning the response
@@ -38,7 +38,6 @@ Future<List<PatientHistory>?>? getPatientHistory(authToken, workplaceId) async {
 Future<bool> addPatientHistory(PatientHistory note, authToken) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/history/add_patient_history');
-    print('Banana callin api addPatient');
 
     String request = jsonEncode(<String, dynamic>{
       "patient_note": {
@@ -46,8 +45,6 @@ Future<bool> addPatientHistory(PatientHistory note, authToken) async {
         "workplace_id": note.workplaceId,
         "patient_id": note.patientId,
         "appointment_date": note.appointmentDate,
-        if (note.createdAt != null) "createdAt": note.createdAt,
-        if (note.deleted != null) "deleted": note.deleted
       },
       "authToken": {
         "access_token": authToken[0],
@@ -63,7 +60,35 @@ Future<bool> addPatientHistory(PatientHistory note, authToken) async {
       body: request,
     );
 
-    print('Banana callin api with $request');
+    if (res.statusCode != 200) {
+      print('banana Failed to retrieve the http package! ${res.body}');
+      return false;
+    }
+    return true;
+  } catch (e) {
+    print('Banana $e');
+    return false;
+  }
+}
+
+Future<bool> updatePatientHistory(
+    String? textToUpdate, String? noteId, List authToken) async {
+  try {
+    Uri url = Uri.parse(
+        '${dotenv.env['API_URL']}/history/update_patient_history?text_to_update=$textToUpdate&note_id=$noteId');
+
+    String request = jsonEncode(<String, dynamic>{
+      "access_token": authToken[0],
+      "token_type": authToken[1],
+    });
+
+    http.Response res = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: request,
+    );
 
     if (res.statusCode != 200) {
       print('banana Failed to retrieve the http package! ${res.body}');

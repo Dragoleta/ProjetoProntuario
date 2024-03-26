@@ -46,8 +46,6 @@ Future<bool> addPatient(Patient newPatient, authToken) async {
         "motherName": newPatient.motherName,
         "fatherName": newPatient.fatherName,
         "diagnose": newPatient.diagnose,
-        if (newPatient.createdAt != null) "createdAt": newPatient.createdAt,
-        if (newPatient.deleted != null) "deleted": newPatient.deleted
       },
       "authToken": {
         "access_token": authToken[0],

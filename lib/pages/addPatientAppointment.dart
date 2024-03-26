@@ -93,6 +93,13 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                           if (res == true) {
                             Navigator.of(context).pop();
                           }
+                          if (false == res) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content:
+                                      Text('An Error occoured, try agian!')),
+                            );
+                          }
                         } catch (e) {
                           print('Banana $e');
                         }

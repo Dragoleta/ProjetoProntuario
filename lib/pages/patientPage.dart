@@ -63,6 +63,7 @@ class _PatientPageState extends State<PatientPage> {
             return const Text('No Patients');
           }
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: snapshot.data?.length,
             itemBuilder: (context, index) {
               return PatientHistoryCard(

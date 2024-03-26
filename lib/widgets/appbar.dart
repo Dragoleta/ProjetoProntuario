@@ -51,6 +51,8 @@ Widget actionAppBarIcon(
       onPressed: actionButtonFuntion,
       tooltip: "Edit this history",
     );
+  } else if (iconType == 3) {
+    return const SizedBox();
   }
   return IconButton(
     icon: const Icon(Icons.add),

@@ -37,15 +37,11 @@ Future<List<Workplace>?>? getAllWorkplaces(authToken) async {
 
 Future<bool> createWorkplace(Workplace place, authToken) async {
   try {
-    print('Banana calling create place');
-
     Uri url = Uri.parse('${dotenv.env['API_URL']}/workplace/add_workplace');
 
     String request = jsonEncode(<String, dynamic>{
       "workplace": {
-        "id": place.id,
         "name": place.name,
-        "professional_id": place.professional_Id,
         if (place.createdAt != null) "createdAt": place.createdAt,
         if (place.deleted != null) "deleted": place.deleted
       },
@@ -64,7 +60,7 @@ Future<bool> createWorkplace(Workplace place, authToken) async {
     );
 
     if (res.statusCode != 200) {
-      print('banana Failed to retrieve the http package!');
+      print('banana Failed to retrieve the http package! ${res.body}');
       return false;
     }
     return true;

@@ -32,15 +32,3 @@ Future<bool> checkHasProfessinal(LocalStorage storage) async {
     return false;
   }
 }
-
-    // widget.localStorage.setCurrentProfessionalFromDB();
-    // sleep(const Duration(seconds: 1));
-    // // ignore: unnecessary_null_comparison
-    // if (user != null) {
-    //   loginHelper(user, widget.localStorage, context);
-    //   Navigator.of(context).pushNamed('/workplaces');
-    // } else {
-    //   print('ldesogado');
-
-    //   // Navigator.of(context).pushNamed('/loginSignin');
-    // }

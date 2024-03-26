@@ -14,7 +14,6 @@ class AddPatientPageV2 extends StatefulWidget {
   State<AddPatientPageV2> createState() => _AddPatientPageV2State();
 }
 
-// TODO: implement user interface a nd add database
 class _AddPatientPageV2State extends State<AddPatientPageV2> {
   final _formKey = GlobalKey<FormState>();
   @override
@@ -48,26 +47,18 @@ class _AddPatientPageV2State extends State<AddPatientPageV2> {
                     currentField: item, localStorage: widget.localStorage),
               ElevatedButton(
                   child: const Text('Continue'),
-                  // onPressed: () {
-                  //   // Patient? patient = widget.localStorage.getPatientCreation();
-                  //   // if (patient.name != null) {
-                  //   //   PatientsRepo().addPatient(patient);
-                  //   // }
-                  //   // Navigator.of(context).pushNamed('/patients');
-                  //   // setState(() {});
-                  // }),
                   onPressed: () async {
                     Patient? newPatient =
                         widget.localStorage.getPatientCreation();
+
                     bool res = await addPatient(
                         newPatient!, widget.localStorage.getActiveAuthToken());
 
                     if (true == res) {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pushNamed('/Workplaces');
+                      Navigator.of(context).popAndPushNamed('/Workplaces');
                     }
 
-                    if (true == res) {
+                    if (false == res) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                             content: Text('An Error occoured, try agian!')),
