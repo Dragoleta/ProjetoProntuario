@@ -5,6 +5,7 @@ import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
+import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class SignInPage extends StatelessWidget {
   final LocalStorage localStorage;
@@ -12,9 +13,12 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
+      appBar: customAppBar(context,
+          actionButtonFuntion: () {}, appbarTitle: 'Criar conta', iconType: 3),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 200, 0, 0),
+        padding: EdgeInsets.fromLTRB(0, size.height * 0.3, 0, 0),
         child: Center(
           child: Column(
             children: [
@@ -38,10 +42,11 @@ class SignInPage extends StatelessWidget {
 
     if (googleSignInAccount == null) {
       print("banana null");
+      return;
     }
 
     User user = User(
-      id: googleSignInAccount!.id,
+      id: googleSignInAccount.id,
       name: googleSignInAccount.displayName ?? '',
       email: googleSignInAccount.email,
     );
@@ -49,17 +54,14 @@ class SignInPage extends StatelessWidget {
     await createUser(user);
 
     storage.setCurrentProfessional(user);
-    bool loginRes = await loginHelper(storage);
-    if (true == loginRes) {
-      Navigator.pushReplacementNamed(context, '/workplaces');
-    }
+    await loginHelper(storage, context);
   }
 
   Future logOrSign(LocalStorage storage, context) async {
     try {
       bool hasData = await checkHasProfessinal(storage);
       if (true != hasData) {
-        loginHelper(storage);
+        loginHelper(storage, context);
       } else {
         signIn(storage, context);
       }

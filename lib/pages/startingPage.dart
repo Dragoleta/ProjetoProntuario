@@ -18,7 +18,7 @@ class _StartPageState extends State<StartPage> {
       appBar: customAppBar(context,
           actionButtonFuntion: () async {},
           appbarTitle: 'Bem vindo!',
-          iconType: 0),
+          iconType: 3),
       body: Center(
         child: ElevatedButton(
           child: const Text('Entrar'),
@@ -26,14 +26,11 @@ class _StartPageState extends State<StartPage> {
             bool hasProfessional =
                 await checkHasProfessinal(widget.localStorage);
 
-            bool logged = await loginHelper(widget.localStorage);
-            if (false == hasProfessional || false == logged) {
+            if (false == hasProfessional) {
               Navigator.popAndPushNamed(context, '/sigin');
             }
 
-            if (true == logged) {
-              Navigator.popAndPushNamed(context, '/workplaces');
-            }
+            await loginHelper(widget.localStorage, context);
           },
         ),
       ),
