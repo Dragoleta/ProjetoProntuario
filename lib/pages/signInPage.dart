@@ -31,22 +31,6 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Future logOrSign(LocalStorage storage, context) async {
-    try {
-      bool hasData = await checkHasProfessinal(storage);
-      if (true != hasData) {
-        loginHelper(storage);
-      } else {
-        signIn(storage, context);
-      }
-
-      // final GoogleSignInAuthentication googleSignInAuthentication =
-      //     await googleSignInAccount.authentication;
-    } catch (e) {
-      print('Error $e');
-    }
-  }
-
   void signIn(LocalStorage storage, context) async {
     final GoogleSignIn signIn = GoogleSignIn();
 
@@ -61,12 +45,29 @@ class SignInPage extends StatelessWidget {
       name: googleSignInAccount.displayName ?? '',
       email: googleSignInAccount.email,
     );
-
     UserRepo().addUser(user);
-    bool res = await createUser(user);
-    if (true == res) {
-      storage.setCurrentProfessional(user);
-      loginHelper(storage);
+    await createUser(user);
+
+    storage.setCurrentProfessional(user);
+    bool loginRes = await loginHelper(storage);
+    if (true == loginRes) {
+      Navigator.pushReplacementNamed(context, '/workplaces');
+    }
+  }
+
+  Future logOrSign(LocalStorage storage, context) async {
+    try {
+      bool hasData = await checkHasProfessinal(storage);
+      if (true != hasData) {
+        loginHelper(storage);
+      } else {
+        signIn(storage, context);
+      }
+
+      // final GoogleSignInAuthentication googleSignInAuthentication =
+      //     await googleSignInAccount.authentication;
+    } catch (e) {
+      print('Error $e');
     }
   }
 }

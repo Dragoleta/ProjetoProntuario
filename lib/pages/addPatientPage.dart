@@ -115,7 +115,6 @@ class AddPatientCard extends StatelessWidget {
     } else if (currentField == "father's name") {
       doingPatient!.fatherName = text;
     }
-    print('Banana ${doingPatient!.professional_Id}');
-    localStorage.setPatientCreation(doingPatient);
+    localStorage.setPatientCreation(doingPatient!);
   }
 }

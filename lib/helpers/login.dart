@@ -11,6 +11,10 @@ Future<bool> loginHelper(LocalStorage storage) async {
     return false;
   }
   var response = await loginApi(user);
+  if ('' == response) {
+    print('Banana user not found');
+    return false;
+  }
 
   storage.setCurrentProfessional(user);
   storage.setActiveAuthToken(response);
@@ -20,13 +24,11 @@ Future<bool> loginHelper(LocalStorage storage) async {
 Future<bool> checkHasProfessinal(LocalStorage storage) async {
   try {
     User? userFromLocalDB = await UserRepo().getUserFromLocalDB();
-
     if (null != userFromLocalDB) {
       storage.setCurrentProfessional(userFromLocalDB);
       return true;
-    } else {
-      return false;
     }
+    return false;
   } catch (error) {
     print('Banana Error $error');
     return false;

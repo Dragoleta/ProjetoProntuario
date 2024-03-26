@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => StartPage(
               localStorage: storage,
             ),
-        '/loginSignin': (context) => SignInPage(
+        '/sigin': (context) => SignInPage(
               localStorage: storage,
             ),
         '/workplaces': (context) => WorkplacePage(
