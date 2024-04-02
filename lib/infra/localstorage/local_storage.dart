@@ -68,7 +68,6 @@ class LocalStorage {
     try {
       return authToken;
     } catch (e) {
-      print('banana $e');
       return null;
     }
   }

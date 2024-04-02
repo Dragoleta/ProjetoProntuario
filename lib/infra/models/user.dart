@@ -23,7 +23,6 @@ class User {
         email: json['email'],
         phoneNumber: json['phoneNumber'],
         createdAt: json['createdAt'],
-        deleted: json['deleted'],
       );
 
   Map<String, dynamic> toJSON() => {

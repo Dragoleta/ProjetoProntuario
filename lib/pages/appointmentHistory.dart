@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
@@ -20,15 +21,14 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     Patient? currentPatient = widget.localStorage.getCurrentPatient();
     PatientHistory? currentHistory =
         widget.localStorage.getCurrentAppointment();
+    var authToken = widget.localStorage.getActiveAuthToken();
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: customAppBar(
         context,
-        // TODO: get hid of the add button on the appBar
-        actionButtonFuntion: () async {
-          // Navigator.of(context).pushNamed('/patients/add');
+        actionButtonFuntion: () {
           switchWidget();
           setState(() {});
         },
@@ -44,7 +44,7 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
             width: size.width,
             child: textLocal(size, currentHistory!, widget.localStorage),
           ),
-          saveButton(currentHistory)
+          saveButton(currentHistory, authToken)
         ],
       ),
       // ,
@@ -59,15 +59,21 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     }
   }
 
-  Widget saveButton(PatientHistory currentHistory) {
+  Widget saveButton(PatientHistory currentHistory, authToken) {
     if (__activeWidget == 1) {
       return ElevatedButton(
-        onPressed: () {
-          // TODO: change this to call update api
+        onPressed: () async {
+          bool res = await updatePatientHistory(
+              currentHistory.text, currentHistory.id, authToken);
 
-          // HistoryRepo().updateHistory(currentHistory);
-          switchWidget();
-          setState(() {});
+          if (false == res) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('An Error occoured, try agian!')),
+            );
+          } else {
+            switchWidget();
+            setState(() {});
+          }
         },
         child: const Text('save'),
       );

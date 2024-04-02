@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 
-// ignore: must_be_immutable
 class PatientHistoryCard extends StatelessWidget {
   final Patient patient;
   final PatientHistory history;
-  final VoidCallback delete;
   final LocalStorage storage;
   const PatientHistoryCard(
       {super.key,
       required this.patient,
       required this.history,
-      required this.delete,
       required this.storage});
 
   @override
@@ -28,24 +26,55 @@ class PatientHistoryCard extends StatelessWidget {
           children: <Widget>[
             GestureDetector(
               onTap: () {
-                // storage.setCurrentPatient(patient);
                 storage.setCurrentAppointment(history);
                 Navigator.of(context)
                     .pushNamed('/patients/patient/appointment');
               },
-              // TODO: Change this to use a more non gambiara
-              child: Text(
-                '${history.appointmentDate}          ${history.text}',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[900],
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    history.appointmentDate,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey[900],
+                    ),
+                  ),
+                  const VerticalDivider(
+                    thickness: 10,
+                    width: 25,
+                  ),
+                  SizedBox(
+                    width: 210,
+                    child: Text(
+                      '${history.text}',
+                      softWrap: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[900],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             IconButton(
               icon: const Icon(Icons.delete),
               color: Colors.red,
-              onPressed: delete,
+              onPressed: () async {
+                var authToken = storage.getActiveAuthToken();
+
+                if (authToken == null) {
+                  return;
+                }
+                bool? response =
+                    await deletePatientHistory(authToken, history.id);
+                if (response == true) {
+                  Navigator.of(context).popAndPushNamed('/patients/patient');
+                }
+              },
               tooltip: "Delete this patient",
             )
           ],

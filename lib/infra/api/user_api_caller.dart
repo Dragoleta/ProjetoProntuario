@@ -11,14 +11,16 @@ Future<String> loginApi(User user) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/user/login');
 
+    var request = jsonEncode(<String, dynamic>{
+      "id": user.id,
+      "user_email": user.email,
+    });
+
     http.Response res = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode(<String, dynamic>{
-          "id": user.id,
-          "user_email": user.email,
-        }));
+        body: request);
 
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package!');
@@ -34,8 +36,9 @@ Future<String> loginApi(User user) async {
 
 Future<bool> createUser(User user) async {
   try {
-    print('Banana calling create user');
     Uri url = Uri.parse('${dotenv.env['API_URL']}/user/create_user');
+    user.deleted = false;
+    user.createdAt = null;
 
     http.Response res = await http.post(
       url,
@@ -46,7 +49,7 @@ Future<bool> createUser(User user) async {
     );
 
     if (res.statusCode != 200) {
-      print('Failed to retrieve the http package!');
+      print('Failed to retrieve the http package! ${res.body}');
       return false;
     }
     return true;

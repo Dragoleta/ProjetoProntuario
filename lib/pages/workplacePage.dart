@@ -17,7 +17,6 @@ class WorkplacePage extends StatefulWidget {
 }
 
 bool __addPressed = false;
-int __itemCount = 0;
 
 class _WorkplacePageState extends State<WorkplacePage> {
   @override
@@ -58,18 +57,12 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
           return const Text('No workplaces');
         }
 
-        __itemCount = snapshot.data!.length;
         return ListView.builder(
           itemCount: snapshot.data?.length,
           itemBuilder: (context, index) {
             return WorkplaceCard(
               storage: localStorage,
               place: snapshot.data![index],
-              delete: () {
-                // TODO: change to remove from api
-                // WorkplaceRepo().deleteWorkplaceFromDb(snapshot.data![index]);
-                Navigator.of(context).popAndPushNamed('/workplaces');
-              },
             );
           },
         );
@@ -92,17 +85,17 @@ class AddPlaceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: TextField(
-        onSubmitted: (e) {
-          int workplaceGenId = ((__itemCount + 1) * (__itemCount - 1));
+        onSubmitted: (e) async {
           Workplace newPlace = Workplace(
-              name: e,
-              professional_Id: professionalId!,
-              id: workplaceGenId.toString());
-          createWorkplace(newPlace, authToken);
-          __addPressed = false;
+            name: e,
+            professional_Id: professionalId!,
+          );
+          bool res = await createWorkplace(newPlace, authToken);
+          if (res == true) {
+            __addPressed = false;
 
-          Navigator.of(context).pop();
-          Navigator.of(context).pushNamed('/workplaces');
+            Navigator.of(context).popAndPushNamed('/workplaces');
+          }
         },
         obscureText: false,
         style: TextStyle(fontSize: 18, color: Colors.grey[900]),
