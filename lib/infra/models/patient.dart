@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
+
 class Patient {
   String? id;
   String? professional_Id;
@@ -58,11 +60,11 @@ class Patient {
   }
 
   List getPatientsList() => [
-        'Name',
-        'Sex',
-        'Birthdate',
-        'Diagnose',
-        "Mother's Name",
-        "Father's Name"
+        NAME,
+        SEX,
+        BIRTHDATE,
+        DIAGNOSE,
+        MOTHER_NAME,
+        FATHER_NAME,
       ];
 }

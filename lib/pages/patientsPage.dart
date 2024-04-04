@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/patients_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
@@ -29,7 +30,7 @@ class _PatientsPageState extends State<PatientsPage> {
           appbarTitle: workplace!.name,
           iconType: 0,
         ),
-        backgroundColor: Colors.grey,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
             Expanded(child: patientsCardsBuilder(widget.localStorage))
@@ -48,7 +49,7 @@ class _PatientsPageState extends State<PatientsPage> {
           return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
           if (snapshot.data == null) {
-            return const Text('No Patients');
+            return Text(NO_PATIENTS);
           }
           return ListView.builder(
             itemCount: snapshot.data?.length,
@@ -63,7 +64,7 @@ class _PatientsPageState extends State<PatientsPage> {
             },
           );
         } else {
-          return Text('Nothing here $snapshot');
+          return Text(NO_PATIENTS);
         }
       },
     );

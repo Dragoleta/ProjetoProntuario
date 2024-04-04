@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/helpers/login.dart';
 import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
@@ -16,18 +17,18 @@ class SignInPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: customAppBar(context,
-          actionButtonFuntion: () {}, appbarTitle: 'Criar conta', iconType: 3),
+          actionButtonFuntion: () {}, appbarTitle: CREATEACCOUNT, iconType: 3),
       body: Padding(
         padding: EdgeInsets.fromLTRB(0, size.height * 0.3, 0, 0),
         child: Center(
           child: Column(
             children: [
-              const Text('Google sign in'),
+              Text(GOOGLE_CREATE_ACCOUNT),
               ElevatedButton(
                   onPressed: () {
                     signIn(localStorage, context);
                   },
-                  child: const Text('Sign in with google'))
+                  child: Text(GOOGLE_CREATE_ACCOUNT))
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/patients_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
@@ -34,10 +35,10 @@ class _AddPatientPageV2State extends State<AddPatientPageV2> {
           actionButtonFuntion: () async {
             setState(() {});
           },
-          appbarTitle: 'Add patient',
+          appbarTitle: ADD_PATIENT,
           iconType: 0,
         ),
-        backgroundColor: Colors.grey,
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Form(
           key: _formKey,
           child: Column(
@@ -46,7 +47,7 @@ class _AddPatientPageV2State extends State<AddPatientPageV2> {
                 AddPatientCard(
                     currentField: item, localStorage: widget.localStorage),
               ElevatedButton(
-                  child: const Text('Continue'),
+                  child: Text(CONTINUE),
                   onPressed: () async {
                     Patient? newPatient =
                         widget.localStorage.getPatientCreation();
@@ -60,8 +61,7 @@ class _AddPatientPageV2State extends State<AddPatientPageV2> {
 
                     if (false == res) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('An Error occoured, try agian!')),
+                        SnackBar(content: Text(Generic_error)),
                       );
                     }
                   })
@@ -97,7 +97,6 @@ class _AddPatientCardState extends State<AddPatientCard> {
             _selectDate(context);
           },
           decoration: InputDecoration(
-            border: const OutlineInputBorder(),
             labelText: widget.currentField,
             prefixIcon: const Icon(Icons.calendar_month),
             enabledBorder: const OutlineInputBorder(
@@ -114,9 +113,6 @@ class _AddPatientCardState extends State<AddPatientCard> {
       padding: const EdgeInsets.fromLTRB(8, 10, 8, 4),
       child: TextFormField(
           decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.blue)),
             hintText: widget.currentField,
           ),
           onChanged: (value) {
@@ -155,7 +151,7 @@ class _AddPatientCardState extends State<AddPatientCard> {
 
 String? textValidator(value) {
   if (value == null || value.isEmpty) {
-    return 'Please enter a value';
+    return NULL_VALUE_ERROR;
   }
   return null;
 }

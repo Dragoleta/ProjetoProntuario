@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:prontuario_flutter/config/langs/ptbr.dart";
 import "package:prontuario_flutter/infra/api/workplaces_api_caller.dart";
 import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
 import "package:prontuario_flutter/infra/models/workplace.dart";
@@ -25,8 +26,8 @@ class _WorkplacePageState extends State<WorkplacePage> {
         appBar: customAppBar(context, actionButtonFuntion: () {
           __addPressed = true;
           setState(() {});
-        }, appbarTitle: 'Workplaces', iconType: 0),
-        backgroundColor: Colors.grey,
+        }, appbarTitle: WORKPLACE, iconType: 0),
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
             Builder(builder: (context) {
@@ -54,7 +55,7 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
         return const CircularProgressIndicator();
       } else if (snapshot.hasData) {
         if (snapshot.data == null) {
-          return const Text('No workplaces');
+          return Text(NO_WORKPLACES);
         }
 
         return ListView.builder(
@@ -67,7 +68,7 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
           },
         );
       } else {
-        return const Text('Nothing here ');
+        return Text(NO_WORKPLACES);
       }
     },
   );
@@ -100,12 +101,7 @@ class AddPlaceCard extends StatelessWidget {
         obscureText: false,
         style: TextStyle(fontSize: 18, color: Colors.grey[900]),
         decoration: InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white, width: 2.0),
-              borderRadius: BorderRadius.circular(10.0)),
-          labelText: 'Place',
+          labelText: WORKPLACE,
         ),
       ),
     );

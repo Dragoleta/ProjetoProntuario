@@ -23,7 +23,6 @@ AppBar customAppBar(BuildContext context,
     {required VoidCallback actionButtonFuntion,
     required String appbarTitle,
     required int iconType}) {
-  const appBarColor = Colors.greenAccent;
   return AppBar(
     title: Text(
       appbarTitle,
@@ -31,7 +30,7 @@ AppBar customAppBar(BuildContext context,
           color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
     ),
     elevation: 0,
-    backgroundColor: appBarColor,
+    backgroundColor: Theme.of(context).colorScheme.primary,
     centerTitle: true,
     actions: [actionAppBarIcon(context, actionButtonFuntion, iconType)],
   );

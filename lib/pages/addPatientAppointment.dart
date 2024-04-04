@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
@@ -31,10 +32,10 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
       appBar: customAppBar(
         context,
         actionButtonFuntion: () {},
-        appbarTitle: 'New Appointment',
+        appbarTitle: NEW_APPOINTMENT,
         iconType: 2,
       ),
-      backgroundColor: Colors.grey,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: Form(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -43,9 +44,10 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
             children: [
               TextField(
                 controller: _date,
-                decoration: const InputDecoration(
-                    icon: Icon(Icons.calendar_today_outlined),
-                    labelText: "Select date"),
+                decoration: InputDecoration(
+                  icon: const Icon(Icons.calendar_today_outlined),
+                  labelText: APPOINTMENT_DATE,
+                ),
                 onTap: () async {
                   DateTime? datePicked = await showDatePicker(
                       context: context,
@@ -95,9 +97,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                           }
                           if (false == res) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('An Error occoured, try agian!')),
+                              SnackBar(content: Text(Generic_error)),
                             );
                           }
                         } catch (e) {
@@ -130,13 +130,13 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
         maxLines: 13,
         style: TextStyle(fontSize: 18, color: Colors.grey[900]),
         cursorColor: Colors.black87,
-        decoration: const InputDecoration(
-          labelText: 'Write a history',
+        decoration: InputDecoration(
+          labelText: APPOINTMENT_DETAILS,
           filled: true,
           fillColor: Colors.white,
           isDense: true,
-          labelStyle: TextStyle(fontSize: 18, color: Colors.black87),
-          enabledBorder: OutlineInputBorder(
+          labelStyle: const TextStyle(fontSize: 18, color: Colors.black87),
+          enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.purpleAccent, width: 0.0),
               borderRadius: BorderRadius.all(Radius.circular(20))),
         ),
