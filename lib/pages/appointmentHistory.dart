@@ -39,7 +39,6 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
       body: Column(
         children: [
           Container(
-            color: Colors.white,
             margin: const EdgeInsets.fromLTRB(20, 30, 20, 20),
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             width: size.width,
@@ -63,6 +62,9 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
   Widget saveButton(PatientHistory currentHistory, authToken) {
     if (__activeWidget == 1) {
       return ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(
+                Theme.of(context).colorScheme.primary)),
         onPressed: () async {
           bool res = await updatePatientHistory(
               currentHistory.text, currentHistory.id, authToken);
@@ -76,7 +78,10 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
             setState(() {});
           }
         },
-        child: Text(SAVE),
+        child: Text(
+          SAVE,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
       );
     }
     return const SizedBox();
@@ -87,12 +92,10 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     if (__activeWidget == 1) {
       return TextField(
         controller: TextEditingController(text: currentHistory.text),
+        style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
         autofocus: true,
         maxLines: 17,
-        cursorColor: Colors.black,
         autocorrect: true,
-        decoration:
-            const InputDecoration(filled: true, fillColor: Colors.white),
         onChanged: (value) {
           currentHistory.text = value;
           localStorage.setCurrentAppointment(currentHistory);

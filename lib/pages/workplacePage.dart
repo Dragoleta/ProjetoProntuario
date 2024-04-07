@@ -4,7 +4,7 @@ import "package:prontuario_flutter/infra/api/workplaces_api_caller.dart";
 import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
 import "package:prontuario_flutter/infra/models/workplace.dart";
 import "package:prontuario_flutter/widgets/appbar.dart";
-import "package:prontuario_flutter/widgets/workplace_card.dart";
+import "package:prontuario_flutter/widgets/card_widget.dart";
 
 class WorkplacePage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -57,13 +57,26 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
         if (snapshot.data == null) {
           return Text(NO_WORKPLACES);
         }
-
         return ListView.builder(
           itemCount: snapshot.data?.length,
           itemBuilder: (context, index) {
-            return WorkplaceCard(
-              storage: localStorage,
-              place: snapshot.data![index],
+            Workplace workplace = snapshot.data![index];
+            return MyCardWidget(
+              cardTitle: workplace.name,
+              gestureOnTap: () {
+                localStorage.setCurrentWorkplace(workplace);
+                Navigator.of(context).pushNamed('/patients');
+              },
+              iconOnPress: () async {
+                var authToken = localStorage.getActiveAuthToken();
+                if (authToken == null) {
+                  return;
+                }
+                bool? response = await deleteWorkplace(authToken, workplace.id);
+                if (response == true) {
+                  Navigator.of(context).popAndPushNamed('/workplaces');
+                }
+              },
             );
           },
         );
@@ -86,9 +99,9 @@ class AddPlaceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: TextField(
-        onSubmitted: (e) async {
+        onSubmitted: (value) async {
           Workplace newPlace = Workplace(
-            name: e,
+            name: value,
             professional_Id: professionalId!,
           );
           bool res = await createWorkplace(newPlace, authToken);

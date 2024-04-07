@@ -14,6 +14,7 @@ class Patient {
   String? fatherName;
   String? createdAt;
   bool? deleted;
+  bool? valid;
 
   Patient({
     this.workplaceID,
@@ -27,7 +28,39 @@ class Patient {
     this.fatherName,
     this.createdAt,
     this.deleted,
+    this.valid,
   });
+
+  Patient copyWith({
+    String? name,
+    String? diagnose,
+    String? birthdate,
+    String? sex,
+    String? motherName,
+    String? fatherName,
+  }) {
+    return Patient(
+      name: name ?? this.name,
+      diagnose: diagnose ?? this.diagnose,
+      birthdate: birthdate ?? this.birthdate,
+      sex: sex ?? this.sex,
+      motherName: motherName ?? this.motherName,
+      fatherName: fatherName ?? this.fatherName,
+    );
+  }
+
+  // bool get
+
+  // bool isValid()=>
+
+  String? isEmptyValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      valid = false;
+      return 'Fill';
+    }
+
+    return null;
+  }
 
   factory Patient.fromJson(Map<String, dynamic> json) => Patient(
         id: json['id'],

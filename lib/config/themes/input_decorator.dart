@@ -1,7 +1,11 @@
 import "package:flutter/material.dart";
 
 class MyInputTheme {
-  TextStyle _buildTextStyle(Color color, {double size = 16.0}) {
+  final ColorScheme colorScheme;
+
+  MyInputTheme(this.colorScheme);
+
+  TextStyle _buildTextStyle(Color? color, {double size = 16.0}) {
     return TextStyle(
       color: color,
       fontSize: size,
@@ -21,29 +25,28 @@ class MyInputTheme {
   InputDecorationTheme theme() => InputDecorationTheme(
         contentPadding: const EdgeInsets.all(16),
         isDense: false,
+        filled: true,
+        fillColor: colorScheme.secondary,
 
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        constraints: const BoxConstraints(maxWidth: 200),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        constraints: const BoxConstraints(maxWidth: 500),
 
         // Borders
-        errorBorder: _buildBorder(const Color.fromRGBO(178, 110, 99, 1)),
-        focusedBorder: _buildBorder(Colors.black),
-        focusedErrorBorder: _buildBorder(Colors.red),
-        enabledBorder: _buildBorder(Colors.black),
+        errorBorder: _buildBorder(colorScheme.error),
+        focusedBorder: _buildBorder(colorScheme.primary),
+        focusedErrorBorder: _buildBorder(colorScheme.error),
+        enabledBorder: _buildBorder(colorScheme.primary),
         disabledBorder: _buildBorder(Colors.grey),
 
         // Text styles
+        suffixStyle: _buildTextStyle(colorScheme.tertiary),
+        counterStyle: _buildTextStyle(colorScheme.error, size: 12),
+        floatingLabelStyle: _buildTextStyle(colorScheme.tertiary),
 
-        suffixStyle: _buildTextStyle(Colors.black),
-        counterStyle: _buildTextStyle(Colors.grey, size: 12),
-        floatingLabelStyle: _buildTextStyle(
-          Colors.black,
-        ),
-
-        errorStyle: _buildTextStyle(Colors.red, size: 12),
-        helperStyle: _buildTextStyle(Colors.black, size: 12),
-        hintStyle: _buildTextStyle(Colors.black),
-        labelStyle: _buildTextStyle(Colors.black),
-        prefixStyle: _buildTextStyle(Colors.black),
+        errorStyle: _buildTextStyle(colorScheme.error, size: 12),
+        helperStyle: _buildTextStyle(colorScheme.tertiary, size: 12),
+        hintStyle: _buildTextStyle(colorScheme.tertiary),
+        labelStyle: _buildTextStyle(colorScheme.tertiary),
+        prefixStyle: _buildTextStyle(colorScheme.tertiary),
       );
 }

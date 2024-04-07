@@ -17,6 +17,7 @@ class PatientHistoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.secondary,
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -37,7 +38,7 @@ class PatientHistoryCard extends StatelessWidget {
                     history.appointmentDate,
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.grey[900],
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
                   const VerticalDivider(
@@ -53,7 +54,7 @@ class PatientHistoryCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 18,
-                        color: Colors.grey[900],
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
                     ),
                   ),

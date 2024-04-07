@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppBarTemplate extends StatelessWidget {
-  final VoidCallback actionButtonFuntion;
+  final VoidCallback? actionButtonFuntion;
   final String appbarTitle;
   final int iconType;
   const AppBarTemplate(
@@ -13,21 +13,23 @@ class AppBarTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return customAppBar(context,
-        actionButtonFuntion: actionButtonFuntion,
+        actionButtonFuntion: actionButtonFuntion!,
         appbarTitle: appbarTitle,
         iconType: iconType);
   }
 }
 
 AppBar customAppBar(BuildContext context,
-    {required VoidCallback actionButtonFuntion,
+    {required VoidCallback? actionButtonFuntion,
     required String appbarTitle,
     required int iconType}) {
   return AppBar(
     title: Text(
       appbarTitle,
-      style: const TextStyle(
-          color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+      style: TextStyle(
+          color: Theme.of(context).colorScheme.secondary,
+          fontSize: 18,
+          fontWeight: FontWeight.bold),
     ),
     elevation: 0,
     backgroundColor: Theme.of(context).colorScheme.primary,

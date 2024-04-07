@@ -12,6 +12,7 @@ class WorkplaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.secondary,
       margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -20,7 +21,6 @@ class WorkplaceCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             GestureDetector(
-              // Change this to go to the patients from this workplace and set lcoal storage to the place
               onTap: () {
                 storage.setCurrentWorkplace(place);
                 Navigator.of(context).pushNamed('/patients');
@@ -29,7 +29,7 @@ class WorkplaceCard extends StatelessWidget {
                 place.name,
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.grey[900],
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
             ),

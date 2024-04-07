@@ -22,7 +22,13 @@ class _StartPageState extends State<StartPage> {
           iconType: 3),
       body: Center(
         child: ElevatedButton(
-          child: Text(SIGNIN),
+          style: ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(
+                  Theme.of(context).colorScheme.primary)),
+          child: Text(
+            SIGNIN,
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
           onPressed: () async {
             bool hasProfessional =
                 await checkHasProfessinal(widget.localStorage);

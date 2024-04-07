@@ -5,7 +5,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
-import 'package:prontuario_flutter/widgets/patients_card.dart';
+import 'package:prontuario_flutter/widgets/card_widget.dart';
 
 class PatientsPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -30,12 +30,7 @@ class _PatientsPageState extends State<PatientsPage> {
           appbarTitle: workplace!.name,
           iconType: 0,
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(
-          children: [
-            Expanded(child: patientsCardsBuilder(widget.localStorage))
-          ],
-        ));
+        body: Expanded(child: patientsCardsBuilder(widget.localStorage)));
   }
 
   FutureBuilder<List<Patient>?> patientsCardsBuilder(LocalStorage storage) {
@@ -57,9 +52,24 @@ class _PatientsPageState extends State<PatientsPage> {
               if (workplace!.id != snapshot.data![index].workplaceID) {
                 return const SizedBox(height: 0);
               }
-              return PatientCard(
-                storage: storage,
-                patient: snapshot.data![index],
+              Patient patient = snapshot.data![index];
+              return MyCardWidget(
+                cardTitle: patient.name ?? "",
+                gestureOnTap: () async {
+                  storage.setCurrentPatient(patient);
+                  Navigator.of(context).pushNamed('/patients/patient');
+                },
+                iconOnPress: () async {
+                  var authToken = storage.getActiveAuthToken();
+
+                  if (authToken == null) {
+                    return;
+                  }
+                  bool? response = await deletePatient(authToken, patient.id);
+                  if (response == true) {
+                    setState(() {});
+                  }
+                },
               );
             },
           );
