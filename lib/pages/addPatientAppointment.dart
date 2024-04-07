@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:prontuario_flutter/components/date_form_field.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
@@ -31,39 +32,27 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
       appBar: customAppBar(
         context,
         actionButtonFuntion: () {},
-        appbarTitle: 'New Appointment',
+        appbarTitle: NEW_APPOINTMENT,
         iconType: 2,
       ),
-      backgroundColor: Colors.grey,
       body: Form(
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              TextField(
-                controller: _date,
-                decoration: const InputDecoration(
-                    icon: Icon(Icons.calendar_today_outlined),
-                    labelText: "Select date"),
-                onTap: () async {
-                  DateTime? datePicked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      currentDate: DateTime.now(),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2100));
-                  if (datePicked != null) {
-                    setState(() {
-                      _date.text = DateFormat('dd-MM-yyyy').format(datePicked);
-                    });
+              DateFormField(
+                hintText: 'Dia da consulta',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Fill';
                   }
-                  if (datePicked == null) {
-                    setState(() {
-                      _date.text =
-                          DateFormat('dd-MM-yyyy').format(DateTime.now());
-                    });
-                  }
+                  return null;
+                },
+                currentValue: _date.text,
+                labelText: 'Consulta',
+                onChanged: (value) {
+                  _date.text = value;
                 },
               ),
               const SizedBox(
@@ -89,15 +78,12 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                           );
                           bool res =
                               await addPatientHistory(historyNote, authToken);
-
                           if (res == true) {
                             Navigator.of(context).pop();
                           }
                           if (false == res) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content:
-                                      Text('An Error occoured, try agian!')),
+                              SnackBar(content: Text(Generic_error)),
                             );
                           }
                         } catch (e) {
@@ -114,12 +100,6 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
     );
   }
 
-  Widget buildPage(BuildContext context) {
-    return Column(
-      children: [textFildecustom(), textFildecustom(), textFildecustom()],
-    );
-  }
-
   Widget textFildecustom() {
     return SizedBox(
       child: TextField(
@@ -129,16 +109,9 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
         },
         maxLines: 13,
         style: TextStyle(fontSize: 18, color: Colors.grey[900]),
-        cursorColor: Colors.black87,
-        decoration: const InputDecoration(
-          labelText: 'Write a history',
-          filled: true,
-          fillColor: Colors.white,
+        decoration: InputDecoration(
+          labelText: APPOINTMENT_DETAILS,
           isDense: true,
-          labelStyle: TextStyle(fontSize: 18, color: Colors.black87),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purpleAccent, width: 0.0),
-              borderRadius: BorderRadius.all(Radius.circular(20))),
         ),
       ),
     );

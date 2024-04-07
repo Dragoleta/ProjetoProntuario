@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
@@ -23,7 +24,7 @@ class _PatientPageState extends State<PatientPage> {
     List patientFields = Patient().getPatientsList();
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: customAppBar(
         context,
         actionButtonFuntion: () async {
@@ -31,7 +32,7 @@ class _PatientPageState extends State<PatientPage> {
 
           setState(() {});
         },
-        appbarTitle: currentPatient?.name ?? 'Patient',
+        appbarTitle: currentPatient?.name ?? PATIENT,
         iconType: 0,
       ),
       body: Column(
@@ -60,7 +61,7 @@ class _PatientPageState extends State<PatientPage> {
           return const CircularProgressIndicator();
         } else if (snapshot.hasData) {
           if (snapshot.data == null) {
-            return const Text('No Patients');
+            return Text(NO_APPOINTMENTS);
           }
           return ListView.builder(
             shrinkWrap: true,
@@ -74,7 +75,7 @@ class _PatientPageState extends State<PatientPage> {
             },
           );
         } else {
-          return const Text('Nothing here ');
+          return Text(NO_APPOINTMENTS);
         }
       },
     );

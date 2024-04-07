@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/history.dart';
@@ -25,20 +26,19 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: customAppBar(
         context,
         actionButtonFuntion: () {
           switchWidget();
           setState(() {});
         },
-        appbarTitle: currentPatient?.name ?? 'Patient',
+        appbarTitle: currentPatient?.name ?? PATIENT,
         iconType: 1,
       ),
       body: Column(
         children: [
           Container(
-            color: Colors.white,
             margin: const EdgeInsets.fromLTRB(20, 30, 20, 20),
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
             width: size.width,
@@ -62,20 +62,26 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
   Widget saveButton(PatientHistory currentHistory, authToken) {
     if (__activeWidget == 1) {
       return ElevatedButton(
+        style: ButtonStyle(
+            backgroundColor: MaterialStatePropertyAll(
+                Theme.of(context).colorScheme.primary)),
         onPressed: () async {
           bool res = await updatePatientHistory(
               currentHistory.text, currentHistory.id, authToken);
 
           if (false == res) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('An Error occoured, try agian!')),
+              SnackBar(content: Text(Generic_error)),
             );
           } else {
             switchWidget();
             setState(() {});
           }
         },
-        child: const Text('save'),
+        child: Text(
+          SAVE,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
       );
     }
     return const SizedBox();
@@ -86,12 +92,10 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     if (__activeWidget == 1) {
       return TextField(
         controller: TextEditingController(text: currentHistory.text),
+        style: TextStyle(color: Theme.of(context).colorScheme.tertiary),
         autofocus: true,
         maxLines: 17,
-        cursorColor: Colors.black,
         autocorrect: true,
-        decoration:
-            const InputDecoration(filled: true, fillColor: Colors.white),
         onChanged: (value) {
           currentHistory.text = value;
           localStorage.setCurrentAppointment(currentHistory);

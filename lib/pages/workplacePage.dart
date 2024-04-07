@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
+import "package:prontuario_flutter/config/langs/ptbr.dart";
 import "package:prontuario_flutter/infra/api/workplaces_api_caller.dart";
 import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
 import "package:prontuario_flutter/infra/models/workplace.dart";
 import "package:prontuario_flutter/widgets/appbar.dart";
-import "package:prontuario_flutter/widgets/workplace_card.dart";
+import "package:prontuario_flutter/widgets/card_widget.dart";
 
 class WorkplacePage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -25,8 +26,8 @@ class _WorkplacePageState extends State<WorkplacePage> {
         appBar: customAppBar(context, actionButtonFuntion: () {
           __addPressed = true;
           setState(() {});
-        }, appbarTitle: 'Workplaces', iconType: 0),
-        backgroundColor: Colors.grey,
+        }, appbarTitle: WORKPLACE, iconType: 0),
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
             Builder(builder: (context) {
@@ -54,20 +55,33 @@ FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
         return const CircularProgressIndicator();
       } else if (snapshot.hasData) {
         if (snapshot.data == null) {
-          return const Text('No workplaces');
+          return Text(NO_WORKPLACES);
         }
-
         return ListView.builder(
           itemCount: snapshot.data?.length,
           itemBuilder: (context, index) {
-            return WorkplaceCard(
-              storage: localStorage,
-              place: snapshot.data![index],
+            Workplace workplace = snapshot.data![index];
+            return MyCardWidget(
+              cardTitle: workplace.name,
+              gestureOnTap: () {
+                localStorage.setCurrentWorkplace(workplace);
+                Navigator.of(context).pushNamed('/patients');
+              },
+              iconOnPress: () async {
+                var authToken = localStorage.getActiveAuthToken();
+                if (authToken == null) {
+                  return;
+                }
+                bool? response = await deleteWorkplace(authToken, workplace.id);
+                if (response == true) {
+                  Navigator.of(context).popAndPushNamed('/workplaces');
+                }
+              },
             );
           },
         );
       } else {
-        return const Text('Nothing here ');
+        return Text(NO_WORKPLACES);
       }
     },
   );
@@ -85,9 +99,9 @@ class AddPlaceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: TextField(
-        onSubmitted: (e) async {
+        onSubmitted: (value) async {
           Workplace newPlace = Workplace(
-            name: e,
+            name: value,
             professional_Id: professionalId!,
           );
           bool res = await createWorkplace(newPlace, authToken);
@@ -100,12 +114,7 @@ class AddPlaceCard extends StatelessWidget {
         obscureText: false,
         style: TextStyle(fontSize: 18, color: Colors.grey[900]),
         decoration: InputDecoration(
-          fillColor: Colors.white,
-          filled: true,
-          border: OutlineInputBorder(
-              borderSide: const BorderSide(color: Colors.white, width: 2.0),
-              borderRadius: BorderRadius.circular(10.0)),
-          labelText: 'Place',
+          labelText: WORKPLACE,
         ),
       ),
     );
