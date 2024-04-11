@@ -5,7 +5,7 @@ import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
 import "package:prontuario_flutter/pages/addPatientAppointment.dart";
 import "package:prontuario_flutter/pages/addPatientPageV3.dart";
 import "package:prontuario_flutter/pages/appointmentHistory.dart";
-import "package:prontuario_flutter/pages/patientPage.dart";
+import "package:prontuario_flutter/pages/patientProfilePage.dart";
 import "package:prontuario_flutter/pages/patientsPage.dart";
 import "package:prontuario_flutter/pages/signInPage.dart";
 import "package:prontuario_flutter/pages/startingPage.dart";
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/patients/add': (context) => AddPatientPageV3(
               localStorage: storage,
             ),
-        '/patients/patient': (context) => PatientPage(
+        '/patients/patient': (context) => PatientProfile(
               localStorage: storage,
             ),
         '/patients/patient/appointment': (context) => AppointmentHistoryPage(

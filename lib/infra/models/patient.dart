@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
 
 class Patient {
@@ -90,6 +91,13 @@ class Patient {
       if (createdAt != null) "createdAt": createdAt,
       if (deleted != null) "deleted": deleted
     });
+  }
+
+  String convertBirthdate(original) {
+    DateTime originalDate = DateTime.parse(original);
+
+    String formattedDate = DateFormat('dd/MM/yyyy').format(originalDate);
+    return formattedDate;
   }
 
   List getPatientsList() => [
