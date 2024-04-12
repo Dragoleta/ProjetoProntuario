@@ -4,6 +4,7 @@ import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/pages/patientPage.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PatientProfile extends StatefulWidget {
   final LocalStorage localStorage;
@@ -33,8 +34,28 @@ class _PatientProfileState extends State<PatientProfile> {
         patientFields: Patient().getPatientsList(),
         currentPatient: currentPatient,
       ),
-      const Text('Home Page'),
+      Center(
+        child: ElevatedButton(
+            onPressed: () {
+              _launchApp();
+            },
+            child: const Text(
+              'Open google Drive',
+              style: TextStyle(color: Colors.white),
+            )),
+      )
     ];
+  }
+
+  _launchApp() async {
+    // Replace 'package_name' with the actual package name of the app you want to open
+    var url = Uri.parse("https://drive.google.com/drive/u/0/my-drive");
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void _onItemTapped(int index) {

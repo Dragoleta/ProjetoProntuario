@@ -28,9 +28,8 @@ class MyCardWidget extends StatelessWidget {
               child: Text(
                 cardTitle,
                 style: TextStyle(
-                  fontSize: 18,
-                  color: Theme.of(context).colorScheme.tertiary,
-                ),
+                    fontSize: 18,
+                    color: Theme.of(context).colorScheme.tertiary),
               ),
             ),
             IconButton(
