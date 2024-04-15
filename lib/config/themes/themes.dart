@@ -17,15 +17,26 @@ ColorScheme darkColorScheme = const ColorScheme.dark(
   error: Color.fromRGBO(178, 110, 99, 1),
 );
 
+ElevatedButtonThemeData lightButtonTheme = ElevatedButtonThemeData(
+    style: ButtonStyle(
+        backgroundColor: MaterialStatePropertyAll(lightColorScheme.primary)));
+ElevatedButtonThemeData darkButtonTheme = ElevatedButtonThemeData(
+    style: ButtonStyle(
+  backgroundColor: MaterialStatePropertyAll(darkColorScheme.primary),
+));
+
 ThemeData lightMode = ThemeData(
   brightness: Brightness.light,
   inputDecorationTheme: MyInputTheme(lightColorScheme).theme(),
-  primaryColor: const Color.fromRGBO(29, 120, 116, 1),
+  primaryColor: lightColorScheme.primary,
   colorScheme: lightColorScheme,
+  elevatedButtonTheme: lightButtonTheme,
 );
 
 ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   inputDecorationTheme: MyInputTheme(darkColorScheme).theme(),
+  primaryColor: darkColorScheme.primary,
   colorScheme: darkColorScheme,
+  elevatedButtonTheme: darkButtonTheme,
 );

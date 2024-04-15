@@ -35,7 +35,7 @@ class PatientHistoryCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    history.appointmentDate,
+                    Patient().convertBirthdate(history.appointmentDate),
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).colorScheme.tertiary,
