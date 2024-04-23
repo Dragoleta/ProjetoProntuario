@@ -58,7 +58,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
               const SizedBox(
                 height: 25,
               ),
-              textFildecustom(),
+              textFildcustom(),
               const SizedBox(
                 height: 15,
               ),
@@ -90,7 +90,9 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                           print('Banana $e');
                         }
                       },
-                      child: const Text('Save history'))
+                      child: Text('Save history',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary)))
                 ],
               )
             ],
@@ -100,7 +102,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
     );
   }
 
-  Widget textFildecustom() {
+  Widget textFildcustom() {
     return SizedBox(
       child: TextField(
         controller: _appointment,

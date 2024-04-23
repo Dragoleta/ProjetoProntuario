@@ -18,6 +18,7 @@ class _PatientProfileState extends State<PatientProfile> {
   int _selectedIndex = 0;
   late Patient currentPatient;
   late List<Widget> _pages;
+
   @override
   void initState() {
     super.initState();
@@ -36,19 +37,19 @@ class _PatientProfileState extends State<PatientProfile> {
       ),
       Center(
         child: ElevatedButton(
-            onPressed: () {
-              _launchApp();
-            },
-            child: const Text(
-              'Open google Drive',
-              style: TextStyle(color: Colors.white),
-            )),
+          onPressed: () {
+            _launchApp();
+          },
+          child: const Text(
+            'Open google Drive',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
       )
     ];
   }
 
   _launchApp() async {
-    // Replace 'package_name' with the actual package name of the app you want to open
     var url = Uri.parse("https://drive.google.com/drive/u/0/my-drive");
 
     if (await canLaunchUrl(url)) {
@@ -64,7 +65,7 @@ class _PatientProfileState extends State<PatientProfile> {
     });
   }
 
-  BottomNavigationBar MyBottomNavBar() {
+  BottomNavigationBar myBottomNavBar() {
     return BottomNavigationBar(
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
@@ -86,7 +87,20 @@ class _PatientProfileState extends State<PatientProfile> {
         appbarTitle: "Paciente profile",
         iconType: 3,
       ),
-      bottomNavigationBar: MyBottomNavBar(),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              tooltip: "Add a patient appointment",
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed('/patients/patient/addAppointment');
+              },
+            )
+          : null,
+      bottomNavigationBar: myBottomNavBar(),
       body: IndexedStack(
         index: _selectedIndex,
         children: _pages,

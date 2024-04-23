@@ -17,7 +17,6 @@ class _PatientPageState extends State<PatientPage> {
   @override
   Widget build(BuildContext context) {
     Patient? currentPatient = widget.localStorage.getCurrentPatient();
-    Size size = MediaQuery.of(context).size;
     List patientFields = Patient().getPatientsList();
 
     return Scaffold(
