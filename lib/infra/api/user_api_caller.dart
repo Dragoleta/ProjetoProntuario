@@ -16,11 +16,13 @@ Future<String> loginApi(User user) async {
       "user_email": user.email,
     });
 
-    http.Response res = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: request);
+    http.Response res = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: request,
+    );
 
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package!');

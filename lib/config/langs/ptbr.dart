@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 String GREETINGS = 'Bem vindo!';
 String SIGNIN = 'Entrar';
 String CREATEACCOUNT = 'Criar conta';
@@ -24,3 +26,12 @@ String BIRTHDATE = 'Data de Nascimento';
 String DIAGNOSE = 'Diagnóstico';
 String MOTHER_NAME = "Nome da Mãe";
 String FATHER_NAME = "Nome do Pai";
+
+String PATIENT_NAME = 'Nome do Paciente';
+String PATIENT_SEX = 'Sexo do paciente';
+
+String PATIENT_PROFILE = "Perfil do Paciente";
+
+String PROFILE = "Perfil";
+String HISTORY = "Historico";
+String UPLOADS = "Upload de arquivos";

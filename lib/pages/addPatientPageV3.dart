@@ -22,10 +22,12 @@ class _AddPatientPageV3State extends State<AddPatientPageV3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(context,
-          actionButtonFuntion: () {},
-          appbarTitle: 'Testing patient new form',
-          iconType: 3),
+      appBar: customAppBar(
+        context,
+        actionButtonFuntion: () {},
+        appbarTitle: ADD_PATIENT,
+        iconType: 3,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -60,12 +62,13 @@ class _AddPatientPageV3State extends State<AddPatientPageV3> {
                   }
                 },
                 style: ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                        Theme.of(context).colorScheme.primary)),
+                  backgroundColor: MaterialStatePropertyAll(
+                      Theme.of(context).colorScheme.primary),
+                ),
                 child: Text(
                   'Save',
                   style:
-                      TextStyle(color: Theme.of(context).colorScheme.tertiary),
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ))
           ],
         ),

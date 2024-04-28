@@ -56,8 +56,8 @@ class _AddPatientFormState extends State<AddPatientForm> {
                   currentValue: widget.patientModel.name,
                   validator: (value) =>
                       widget.patientModel.isEmptyValidator(value),
-                  hintText: 'Patient name',
-                  labelText: 'Patient Name',
+                  hintText: PATIENT_NAME,
+                  labelText: PATIENT_NAME,
                 ),
                 const SizedBox(
                   height: 20,
@@ -70,8 +70,8 @@ class _AddPatientFormState extends State<AddPatientForm> {
                   currentValue: widget.patientModel.sex,
                   validator: (value) =>
                       widget.patientModel.isEmptyValidator(value),
-                  hintText: 'Patient sex',
-                  labelText: 'Patient sex',
+                  hintText: PATIENT_SEX,
+                  labelText: PATIENT_SEX,
                 ),
                 const SizedBox(
                   height: 20,
@@ -84,15 +84,15 @@ class _AddPatientFormState extends State<AddPatientForm> {
                   currentValue: widget.patientModel.diagnose,
                   validator: (value) =>
                       widget.patientModel.isEmptyValidator(value),
-                  hintText: "$PATIENT $DIAGNOSE",
-                  labelText: 'Patient diagnose',
+                  hintText: DIAGNOSE,
+                  labelText: DIAGNOSE,
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 DateFormField(
-                  labelText: 'Data de Nascimento',
-                  hintText: "Data de Nascimento",
+                  labelText: BIRTHDATE,
+                  hintText: BIRTHDATE,
                   onChanged: (value) {
                     widget.onChanged(
                         widget.patientModel.copyWith(birthdate: value));
@@ -112,8 +112,8 @@ class _AddPatientFormState extends State<AddPatientForm> {
                   currentValue: widget.patientModel.motherName,
                   validator: (value) =>
                       widget.patientModel.isEmptyValidator(value),
-                  hintText: 'Patient mae',
-                  labelText: 'Patient mae',
+                  hintText: MOTHER_NAME,
+                  labelText: MOTHER_NAME,
                 ),
                 const SizedBox(
                   height: 20,
@@ -126,8 +126,8 @@ class _AddPatientFormState extends State<AddPatientForm> {
                   currentValue: widget.patientModel.fatherName,
                   validator: (value) =>
                       widget.patientModel.isEmptyValidator(value),
-                  hintText: 'Patient pai',
-                  labelText: 'Patient pai',
+                  hintText: FATHER_NAME,
+                  labelText: FATHER_NAME,
                 ),
                 const SizedBox(
                   height: 20,

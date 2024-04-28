@@ -25,10 +25,15 @@ class SignInPage extends StatelessWidget {
             children: [
               Text(GOOGLE_CREATE_ACCOUNT),
               ElevatedButton(
-                  onPressed: () {
-                    signIn(localStorage, context);
-                  },
-                  child: Text(GOOGLE_CREATE_ACCOUNT))
+                onPressed: () {
+                  signIn(localStorage, context);
+                },
+                child: Text(
+                  GOOGLE_CREATE_ACCOUNT,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+              )
             ],
           ),
         ),
@@ -66,9 +71,6 @@ class SignInPage extends StatelessWidget {
       } else {
         signIn(storage, context);
       }
-
-      // final GoogleSignInAuthentication googleSignInAuthentication =
-      //     await googleSignInAccount.authentication;
     } catch (e) {
       print('Error $e');
     }

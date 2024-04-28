@@ -21,16 +21,23 @@ class _PatientsPageState extends State<PatientsPage> {
   Widget build(BuildContext context) {
     Workplace? workplace = widget.localStorage.getCurrentWorkplace();
     return Scaffold(
-        appBar: customAppBar(
-          context,
-          actionButtonFuntion: () async {
-            Navigator.of(context).pushNamed('/patients/add');
-            setState(() {});
-          },
-          appbarTitle: workplace!.name,
-          iconType: 0,
-        ),
-        body: Expanded(child: patientsCardsBuilder(widget.localStorage)));
+      appBar: customAppBar(
+        context,
+        actionButtonFuntion: () async {
+          Navigator.of(context).pushNamed('/patients/add');
+          setState(() {});
+        },
+        appbarTitle: workplace!.name,
+        iconType: 0,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: patientsCardsBuilder(widget.localStorage),
+          ),
+        ],
+      ),
+    );
   }
 
   FutureBuilder<List<Patient>?> patientsCardsBuilder(LocalStorage storage) {

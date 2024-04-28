@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/components/patient_appointment_card_builder.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/pages/patientPage.dart';
@@ -28,8 +29,12 @@ class _PatientProfileState extends State<PatientProfile> {
 
   List<Widget> _buildPages() {
     return <Widget>[
-      Expanded(
-        child: patientAppointmentCardBuilder(widget.localStorage),
+      Column(
+        children: [
+          Expanded(
+            child: patientAppointmentCardBuilder(widget.localStorage),
+          ),
+        ],
       ),
       PatientInfo(
         patientFields: Patient().getPatientsList(),
@@ -69,11 +74,11 @@ class _PatientProfileState extends State<PatientProfile> {
     return BottomNavigationBar(
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: 'History'),
+      items: [
+        BottomNavigationBarItem(icon: const Icon(Icons.book), label: HISTORY),
         BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle), label: 'Profile'),
-        BottomNavigationBarItem(icon: Icon(Icons.upload), label: 'Uploads'),
+            icon: const Icon(Icons.supervised_user_circle), label: PROFILE),
+        BottomNavigationBarItem(icon: const Icon(Icons.upload), label: UPLOADS),
       ],
     );
   }
@@ -84,12 +89,12 @@ class _PatientProfileState extends State<PatientProfile> {
       appBar: customAppBar(
         context,
         actionButtonFuntion: () {},
-        appbarTitle: "Paciente profile",
+        appbarTitle: PATIENT_PROFILE,
         iconType: 3,
       ),
       floatingActionButton: _selectedIndex == 0
           ? FloatingActionButton(
-              tooltip: "Add a patient appointment",
+              tooltip: NEW_APPOINTMENT,
               child: Icon(
                 Icons.add,
                 color: Theme.of(context).colorScheme.secondary,
