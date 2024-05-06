@@ -2,13 +2,13 @@ import "package:flutter/material.dart";
 import "package:flutter_dotenv/flutter_dotenv.dart";
 import "package:prontuario_flutter/config/themes/themes.dart";
 import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
+import "package:prontuario_flutter/pages/accountCreationPage.dart";
 import "package:prontuario_flutter/pages/addPatientAppointment.dart";
 import "package:prontuario_flutter/pages/addPatientPageV3.dart";
 import "package:prontuario_flutter/pages/appointmentHistory.dart";
+import "package:prontuario_flutter/pages/loginPage.dart";
 import "package:prontuario_flutter/pages/patientProfilePage.dart";
 import "package:prontuario_flutter/pages/patientsPage.dart";
-import "package:prontuario_flutter/pages/signInPage.dart";
-import "package:prontuario_flutter/pages/startingPage.dart";
 import "package:prontuario_flutter/pages/workplacePage.dart";
 
 void main() async {
@@ -30,10 +30,10 @@ class MyApp extends StatelessWidget {
       theme: lightMode,
       darkTheme: darkMode,
       routes: {
-        '/': (context) => StartPage(
+        '/': (context) => LoginPage(
               localStorage: storage,
             ),
-        '/sigin': (context) => SignInPage(
+        '/sigin': (context) => AccountCreationPage(
               localStorage: storage,
             ),
         '/workplaces': (context) => WorkplacePage(

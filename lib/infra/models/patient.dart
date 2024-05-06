@@ -50,10 +50,6 @@ class Patient {
     );
   }
 
-  // bool get
-
-  // bool isValid()=>
-
   String? isEmptyValidator(String? value) {
     if (value == null || value.isEmpty) {
       valid = false;

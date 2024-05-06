@@ -24,11 +24,17 @@ class PatientCard extends StatelessWidget {
                 storage.setCurrentPatient(patient);
                 Navigator.of(context).pushNamed('/patients/patient');
               },
-              child: Text(
-                patient.name ?? 'Text',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[900],
+              child: SizedBox(
+                width: 210,
+                child: Text(
+                  patient.name ?? 'Text',
+                  softWrap: true,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey[900],
+                  ),
                 ),
               ),
             ),
