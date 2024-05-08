@@ -8,16 +8,13 @@ Future<List<Patient>?>? getAllPatients(authToken) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/patient/get_all_patients');
 
-    http.Response res = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, dynamic>{
-            "access_token": authToken[0],
-            "token_type": authToken[1],
-          },
-        ));
+    http.Response res = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer ${authToken[0]}"
+      },
+    );
 
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package! ${res.body}');
@@ -38,25 +35,20 @@ Future<bool> addPatient(Patient newPatient, authToken) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/patient/add_patient');
     String request = jsonEncode(<String, dynamic>{
-      "patient": {
-        "workplace_id": newPatient.workplaceID,
-        "name": newPatient.name,
-        "sex": newPatient.sex,
-        "birthdate": newPatient.birthdate,
-        "motherName": newPatient.motherName,
-        "fatherName": newPatient.fatherName,
-        "diagnose": newPatient.diagnose,
-      },
-      "authToken": {
-        "access_token": authToken[0],
-        "token_type": authToken[1],
-      }
+      "workplace_id": newPatient.workplaceID,
+      "name": newPatient.name,
+      "sex": newPatient.sex,
+      "birthdate": newPatient.birthdate,
+      "motherName": newPatient.motherName,
+      "fatherName": newPatient.fatherName,
+      "diagnose": newPatient.diagnose,
     });
 
     http.Response res = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer ${authToken[0]}"
       },
       body: request,
     );
@@ -77,16 +69,13 @@ Future<bool?> deletePatient(authToken, patientId) async {
     Uri url = Uri.parse(
         '${dotenv.env['API_URL']}/patient/delete_patient?patient_id=$patientId');
 
-    http.Response res = await http.delete(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, dynamic>{
-            "access_token": authToken[0],
-            "token_type": authToken[1],
-          },
-        ));
+    http.Response res = await http.delete(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer ${authToken[0]}"
+      },
+    );
 
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package! ${res.body}');

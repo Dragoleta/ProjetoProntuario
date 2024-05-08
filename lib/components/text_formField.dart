@@ -6,18 +6,19 @@ class MyTextFormField extends StatelessWidget {
   final String? currentValue;
   final FocusNode? nextFocusNode;
   final FocusNode? focusNode;
-  final String hintText;
+  final String? hintText;
   final String labelText;
 
-  const MyTextFormField(
-      {super.key,
-      required this.onChanged,
-      required this.validator,
-      required this.currentValue,
-      required this.nextFocusNode,
-      required this.focusNode,
-      required this.hintText,
-      required this.labelText});
+  const MyTextFormField({
+    super.key,
+    required this.onChanged,
+    required this.validator,
+    required this.currentValue,
+    required this.nextFocusNode,
+    required this.focusNode,
+    this.hintText,
+    required this.labelText,
+  });
 
   @override
   Widget build(BuildContext context) {

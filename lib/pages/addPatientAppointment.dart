@@ -128,6 +128,17 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                   ElevatedButton(
                       onPressed: () async {
                         try {
+                          if (_date.text == "" || _appointment.text == "") {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Por favor preencha todos os campos",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
                           PatientHistory historyNote = PatientHistory(
                             text: _appointment.text,
                             patientId: patient?.id,
@@ -143,7 +154,9 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                           }
                           if (false == res) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(Generic_error)),
+                              SnackBar(
+                                content: Text(Generic_error),
+                              ),
                             );
                           }
                         } catch (e) {

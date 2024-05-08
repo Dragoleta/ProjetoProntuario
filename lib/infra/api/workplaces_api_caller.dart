@@ -9,16 +9,13 @@ Future<List<Workplace>?>? getAllWorkplaces(authToken) async {
     Uri url =
         Uri.parse('${dotenv.env['API_URL']}/workplace/get_all_workplaces');
 
-    http.Response res = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, dynamic>{
-            "access_token": authToken[0],
-            "token_type": authToken[1],
-          },
-        ));
+    http.Response res = await http.get(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer ${authToken[0]}"
+      },
+    );
 
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package! ${res.body}');
@@ -39,21 +36,14 @@ Future<bool> createWorkplace(Workplace place, authToken) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/workplace/add_workplace');
 
-    String request = jsonEncode(<String, dynamic>{
-      "workplace": {
-        "name": place.name,
-        if (place.createdAt != null) "createdAt": place.createdAt,
-        if (place.deleted != null) "deleted": place.deleted
-      },
-      "authToken": {
-        "access_token": authToken[0],
-        "token_type": authToken[1],
-      }
+    var request = jsonEncode(<String, dynamic>{
+      "name": place.name,
     });
 
     http.Response res = await http.post(
       url,
       headers: <String, String>{
+        "Authorization": "Bearer ${authToken[0]}",
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: request,
@@ -75,16 +65,13 @@ Future<bool?> deleteWorkplace(authToken, workplaceId) async {
     Uri url = Uri.parse(
         '${dotenv.env['API_URL']}/workplace/delete_workplace?workplace_id=$workplaceId');
 
-    http.Response res = await http.delete(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, dynamic>{
-            "access_token": authToken[0],
-            "token_type": authToken[1],
-          },
-        ));
+    http.Response res = await http.delete(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer ${authToken[0]}"
+      },
+    );
 
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package! ${res.body}');

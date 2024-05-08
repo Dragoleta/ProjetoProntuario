@@ -7,23 +7,25 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:prontuario_flutter/infra/models/user.dart';
 
-Future<String> loginApi(User user) async {
+Future<String> loginApi(String userEmail, String userPassword) async {
   try {
-    Uri url = Uri.parse('${dotenv.env['API_URL']}/user/login');
+    Uri url = Uri.parse('${dotenv.env['API_URL']}/user/token');
 
-    var request = jsonEncode(<String, dynamic>{
-      "id": user.id,
-      "user_email": user.email,
-    });
+    var payload = {
+      'username': userEmail,
+      'password': userPassword,
+    };
 
-    http.Response res = await http.post(
+    var res = await http.post(
       url,
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: request,
+      body: payload,
     );
 
+    print("Banana $payload");
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package!');
       return '';
@@ -34,6 +36,33 @@ Future<String> loginApi(User user) async {
     print('Banana $e');
     return 'error';
   }
+}
+
+Future<User?>? whoAmI(token) async {
+  try {
+    Uri url = Uri.parse('${dotenv.env['API_URL']}/user/me');
+
+    var res = await http.get(
+      url,
+      headers: <String, String>{
+        'Authorization': 'Bearer ${token[0]}',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (res.statusCode != 200) {
+      print('Failed to retrieve the http package!');
+      return null;
+    }
+
+    dynamic jsonBody = json.decode(res.body);
+    User user = User.fromJson(jsonBody);
+    print("Banana ${user.name}");
+    return user;
+  } catch (e) {
+    print('Banana $e');
+  }
+  return null;
 }
 
 Future<bool> createUser(User user) async {
