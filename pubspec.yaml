@@ -36,7 +36,9 @@ dependencies:
   http: ^1.2.1
   flutter_dotenv: ^5.1.0
   url_launcher: any
+  speech_to_text: ^6.6.1
 
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

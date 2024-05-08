@@ -8,6 +8,8 @@ import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class AddAppointmentPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -20,6 +22,54 @@ class AddAppointmentPage extends StatefulWidget {
 class _AddAppointmentPageState extends State<AddAppointmentPage> {
   final TextEditingController _date = TextEditingController();
   final TextEditingController _appointment = TextEditingController();
+
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _wordsSpoken = "";
+
+  @override
+  void initState() {
+    super.initState();
+    initSpeech();
+  }
+
+  void initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+    setState(() {});
+  }
+
+  void _startListening() async {
+    var locales = await _speechToText.locales();
+
+    int selectedLocaleIndex =
+        locales.indexWhere((locale) => locale.localeId == "pt_BR");
+
+    if (selectedLocaleIndex != -1) {
+      // Use the index of the selected locale to access the corresponding locale object
+      var selectedLocaleObject = locales[selectedLocaleIndex];
+
+      // Now you have the selected locale object, and you can use it as needed
+      _speechToText.listen(
+        onResult: _onSpeechResult,
+        localeId: selectedLocaleObject.localeId,
+      );
+    } else {}
+
+    setState(() {});
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+
+    setState(() {});
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _wordsSpoken = result.recognizedWords;
+      _appointment.text = _wordsSpoken;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +108,11 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
               const SizedBox(
                 height: 25,
               ),
+              Text(_speechToText.isListening
+                  ? ""
+                  : _speechEnabled
+                      ? "tap the micropohne"
+                      : "Speech not available"),
               textFildcustom(),
               const SizedBox(
                 height: 15,
@@ -65,6 +120,11 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  IconButton(
+                      onPressed: _speechToText.isListening
+                          ? _stopListening
+                          : _startListening,
+                      icon: const Icon(Icons.mic)),
                   ElevatedButton(
                       onPressed: () async {
                         try {
