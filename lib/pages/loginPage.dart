@@ -17,7 +17,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late User? userFromLocalDB;
+  User? userFromLocalDB;
+  String _userEmail = "";
 
   @override
   void initState() {
@@ -26,16 +27,28 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _getUserFromLocalDB() async {
-    User? userFromLocalDB2 = await UserRepo().getUserFromLocalDB();
+    userFromLocalDB = await UserRepo().getUserFromLocalDB();
+    _userEmail = userFromLocalDB!.email!;
+    setState(() {});
+  }
 
-    setState(() {
-      userFromLocalDB = userFromLocalDB2;
-    });
+  Future<void> _setActiveUser() async {
+    User? user = await whoAmI(widget.localStorage.getActiveAuthToken());
+
+    if (user == null) {
+      return;
+    }
+
+    if (userFromLocalDB == null) {
+      UserRepo().addUser(user);
+    }
+
+    widget.localStorage.setCurrentProfessional(user);
+    return;
   }
 
   @override
   Widget build(BuildContext context) {
-    late String userEmail;
     late String userPassword;
 
     return Scaffold(
@@ -52,10 +65,9 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             MyTextFormField(
-              currentValue:
-                  userFromLocalDB == null ? "" : userFromLocalDB?.email,
+              currentValue: _userEmail,
               onChanged: (value) {
-                userEmail = value;
+                _userEmail = value;
               },
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -82,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
               focusNode: null,
               nextFocusNode: null,
               labelText: PASSWORD,
+              obscureText: true,
             ),
             const SizedBox(height: 16.0),
             Row(
@@ -89,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    var res = await loginApi(userEmail, userPassword);
+                    var res = await loginApi(_userEmail, userPassword);
                     if (res == '') {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(WRONG_PASSWORD_OR_EMAIL)),
@@ -97,7 +110,8 @@ class _LoginPageState extends State<LoginPage> {
                       return;
                     }
                     widget.localStorage.setActiveAuthToken(res);
-                    await setActiveUser(widget.localStorage);
+                    await _setActiveUser();
+
                     Navigator.of(context).pushReplacementNamed('/workplaces');
                   },
                   child: Text(
@@ -123,15 +137,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-Future<void> setActiveUser(LocalStorage localStorages) async {
-  User? user = await whoAmI(localStorages.getActiveAuthToken());
-
-  if (user == null) {
-    return;
-  }
-
-  localStorages.setCurrentProfessional(user);
-  return;
 }

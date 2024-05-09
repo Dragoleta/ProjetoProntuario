@@ -8,17 +8,18 @@ class MyTextFormField extends StatelessWidget {
   final FocusNode? focusNode;
   final String? hintText;
   final String labelText;
+  final bool? obscureText;
 
-  const MyTextFormField({
-    super.key,
-    required this.onChanged,
-    required this.validator,
-    required this.currentValue,
-    required this.nextFocusNode,
-    required this.focusNode,
-    this.hintText,
-    required this.labelText,
-  });
+  const MyTextFormField(
+      {super.key,
+      required this.onChanged,
+      required this.validator,
+      required this.currentValue,
+      required this.nextFocusNode,
+      required this.focusNode,
+      this.hintText,
+      required this.labelText,
+      this.obscureText});
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class MyTextFormField extends StatelessWidget {
       ),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
+      obscureText: obscureText ?? false,
     );
   }
 }

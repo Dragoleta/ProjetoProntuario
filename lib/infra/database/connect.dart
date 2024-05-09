@@ -18,7 +18,7 @@ class Connection {
 
   String get _user => '''
     CREATE TABLE user(
-      email TEXT NOT NULL,
+      email TEXT NOT NULL
       )
   ''';
 
