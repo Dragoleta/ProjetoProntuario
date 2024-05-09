@@ -45,16 +45,13 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
         locales.indexWhere((locale) => locale.localeId == "pt_BR");
 
     if (selectedLocaleIndex != -1) {
-      // Use the index of the selected locale to access the corresponding locale object
       var selectedLocaleObject = locales[selectedLocaleIndex];
 
-      // Now you have the selected locale object, and you can use it as needed
       _speechToText.listen(
         onResult: _onSpeechResult,
         localeId: selectedLocaleObject.localeId,
       );
-    } else {}
-
+    }
     setState(() {});
   }
 
@@ -85,6 +82,17 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
         appbarTitle: NEW_APPOINTMENT,
         iconType: 2,
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: MIC_TAP,
+        onPressed: _speechToText.isListening ? _stopListening : _startListening,
+        backgroundColor: _speechToText.isListening
+            ? Colors.red
+            : Theme.of(context).colorScheme.primary,
+        child: Icon(
+          Icons.mic,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
       body: Form(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -108,11 +116,6 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
               const SizedBox(
                 height: 25,
               ),
-              Text(_speechToText.isListening
-                  ? ""
-                  : _speechEnabled
-                      ? "tap the micropohne"
-                      : "Speech not available"),
               textFildcustom(),
               const SizedBox(
                 height: 15,
@@ -120,11 +123,6 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
-                      onPressed: _speechToText.isListening
-                          ? _stopListening
-                          : _startListening,
-                      icon: const Icon(Icons.mic)),
                   ElevatedButton(
                       onPressed: () async {
                         try {

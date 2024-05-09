@@ -4,6 +4,7 @@ import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
+import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AccountCreationPage extends StatefulWidget {
@@ -102,9 +103,8 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                         );
                         return;
                       }
-                      // UserRepo().addUser(model);
+                      UserRepo().addUser(model);
 
-                      // widget.localStorage.setCurrentProfessional(model);
                       Navigator.popAndPushNamed(context, '/login');
                     },
                     child: Text(

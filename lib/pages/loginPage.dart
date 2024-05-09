@@ -1,14 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/components/text_formField.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
+import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final LocalStorage localStorage;
 
   const LoginPage({super.key, required this.localStorage});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late User? userFromLocalDB;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserFromLocalDB();
+  }
+
+  void _getUserFromLocalDB() async {
+    User? userFromLocalDB2 = await UserRepo().getUserFromLocalDB();
+
+    setState(() {
+      userFromLocalDB = userFromLocalDB2;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +52,14 @@ class LoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             MyTextFormField(
-              currentValue: null,
+              currentValue:
+                  userFromLocalDB == null ? "" : userFromLocalDB?.email,
               onChanged: (value) {
                 userEmail = value;
               },
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Fill';
+                  return FILL;
                 }
                 return null;
               },
@@ -51,13 +75,13 @@ class LoginPage extends StatelessWidget {
               },
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Fill';
+                  return FILL;
                 }
                 return null;
               },
               focusNode: null,
               nextFocusNode: null,
-              labelText: "Password",
+              labelText: PASSWORD,
             ),
             const SizedBox(height: 16.0),
             Row(
@@ -68,13 +92,12 @@ class LoginPage extends StatelessWidget {
                     var res = await loginApi(userEmail, userPassword);
                     if (res == '') {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text("Email or password is invalid")),
+                        SnackBar(content: Text(WRONG_PASSWORD_OR_EMAIL)),
                       );
                       return;
                     }
-                    localStorage.setActiveAuthToken(res);
-                    await setActiveUser(localStorage);
+                    widget.localStorage.setActiveAuthToken(res);
+                    await setActiveUser(widget.localStorage);
                     Navigator.of(context).pushReplacementNamed('/workplaces');
                   },
                   child: Text(
@@ -91,7 +114,7 @@ class LoginPage extends StatelessWidget {
                 Navigator.pushNamed(context, '/sigin');
               },
               child: Text(
-                "Don't have an account? Sign Up",
+                SINGUP_MESSAGE,
                 style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             ),

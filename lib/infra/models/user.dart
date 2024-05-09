@@ -75,6 +75,10 @@ class User {
         if (deleted != null) 'deleted': deleted
       };
 
+  Map<String, dynamic> toJSONLocalDB() => {
+        'email': email,
+      };
+
   String toJSONApi() {
     return jsonEncode(<String, dynamic>{
       "user_email": email,

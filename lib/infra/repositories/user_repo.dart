@@ -6,7 +6,7 @@ class UserRepo {
     try {
       final db = await Connection().getDB();
 
-      return await db.insert('user', user.toJSON());
+      return await db.insert('user', user.toJSONLocalDB());
     } catch (e) {
       print('Error banana ADDUSER $e');
       return '';

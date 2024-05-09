@@ -25,7 +25,7 @@ Future<bool> loginHelper(LocalStorage storage, context) async {
     print('Banana no current professinal');
     return false;
   }
-  var response = await loginApi(user);
+  var response = await loginApi("user", "123");
   if ('' == response) {
     print('Banana user not found');
     return false;

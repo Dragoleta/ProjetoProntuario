@@ -21,8 +21,10 @@ Future<List<PatientHistory>?>? getPatientHistory(authToken, workplaceId) async {
       print('banana Failed to retrieve the http package! ${res.body}');
       return null;
     }
-    // Decodes and maps before returning the response
-    final List<dynamic> parsed = jsonDecode(res.body);
+
+    final String responseBody = utf8.decode(res.bodyBytes);
+    final List<dynamic> parsed = jsonDecode(responseBody);
+
     List<PatientHistory> yourModels =
         parsed.map((json) => PatientHistory.fromJson(json)).toList();
 

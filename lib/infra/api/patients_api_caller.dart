@@ -20,8 +20,10 @@ Future<List<Patient>?>? getAllPatients(authToken) async {
       print('Failed to retrieve the http package! ${res.body}');
       return null;
     }
-    // Decodes and maps before returning the response
-    final List<dynamic> parsed = jsonDecode(res.body);
+
+    final String responseBody = utf8.decode(res.bodyBytes);
+    final List<dynamic> parsed = jsonDecode(responseBody);
+
     List<Patient> yourModels =
         parsed.map((json) => Patient.fromJson(json)).toList();
 
