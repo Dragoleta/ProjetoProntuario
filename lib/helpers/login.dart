@@ -30,7 +30,6 @@ Future<bool> loginHelper(LocalStorage storage, context) async {
     print('Banana user not found');
     return false;
   }
-  print('Banana logado com sucesso! ${user.name}');
   storage.setCurrentProfessional(user);
   storage.setActiveAuthToken(response);
   Navigator.popAndPushNamed(context, '/workplaces');

@@ -25,7 +25,6 @@ Future<String> loginApi(String userEmail, String userPassword) async {
       body: payload,
     );
 
-    print("Banana $payload");
     if (res.statusCode != 200) {
       print('Failed to retrieve the http package!');
       return '';
@@ -57,7 +56,6 @@ Future<User?>? whoAmI(token) async {
 
     dynamic jsonBody = json.decode(res.body);
     User user = User.fromJson(jsonBody);
-    print("Banana ${user.name}");
     return user;
   } catch (e) {
     print('Banana $e');

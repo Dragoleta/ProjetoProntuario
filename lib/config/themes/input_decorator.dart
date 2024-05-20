@@ -22,6 +22,7 @@ class MyInputTheme {
     );
   }
 
+  // TODO: Try to get if color scheme is dark or light......
   InputDecorationTheme theme() => InputDecorationTheme(
         contentPadding: const EdgeInsets.all(16),
         isDense: false,
@@ -36,7 +37,7 @@ class MyInputTheme {
         focusedBorder: _buildBorder(colorScheme.primary),
         focusedErrorBorder: _buildBorder(colorScheme.error),
         enabledBorder: _buildBorder(colorScheme.primary),
-        disabledBorder: _buildBorder(Colors.grey),
+        disabledBorder: _buildBorder(colorScheme.secondary),
 
         // Text styles
         suffixStyle: _buildTextStyle(colorScheme.tertiary),
