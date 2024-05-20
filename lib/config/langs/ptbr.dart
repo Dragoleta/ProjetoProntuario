@@ -1,7 +1,9 @@
 // ignore_for_file: non_constant_identifier_names
 
 String GREETINGS = 'Bem vindo!';
-String SIGNIN = 'Entrar';
+String SIGNIN = 'Registrar';
+String LOGIN = 'Entrar';
+
 String CREATEACCOUNT = 'Criar conta';
 String GOOGLE_CREATE_ACCOUNT = 'Criar conta com Google';
 String WORKPLACE = 'Locais de trabalho';
@@ -17,13 +19,17 @@ String APPOINTMENT_DATE = 'Data do atendimento';
 String APPOINTMENT_DETAILS = 'Detalhes do atendimento';
 String FILL = 'Campo obrigatorio ';
 String PASSWORD = 'Senha';
-String MIC_TAP = 'Toque para comecar a escutar';
+String PASSWORD_CONF = 'Confirmação de senha';
 
+String MIC_TAP = 'Toque para comecar a escutar';
+String CREATING_USER = 'Criando usuario';
+String NO_ACCOUNT_ASK = "";
 // #ERRORS
 String Generic_error = 'Aconteceu um erro, tente novamente';
 String NULL_VALUE_ERROR = 'Por favor preencha esse campo';
-String WRONG_PASSWORD_OR_EMAIL = "Email or password is invalid";
-String SINGUP_MESSAGE = "Don't have an account? Sign Up";
+String WRONG_PASSWORD_OR_EMAIL = "E-mail ou senha são invalidas";
+String SINGUP_MESSAGE = "Não possui uma conta? Registre-se";
+String PASSWORD_MATCH = "As senhas precisam ser iguas";
 
 String PATIENT = 'Paciente';
 String NAME = 'Nome';
@@ -39,5 +45,5 @@ String PATIENT_SEX = 'Sexo do paciente';
 String PATIENT_PROFILE = "Perfil do Paciente";
 
 String PROFILE = "Perfil";
-String HISTORY = "Historico";
+String HISTORY = "Histórico";
 String UPLOADS = "Upload de arquivos";

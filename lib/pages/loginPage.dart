@@ -5,7 +5,6 @@ import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
-import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class LoginPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -52,18 +51,18 @@ class _LoginPageState extends State<LoginPage> {
     late String userPassword;
 
     return Scaffold(
-      appBar: customAppBar(
-        context,
-        actionButtonFuntion: null,
-        appbarTitle: "Login",
-        iconType: 3,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Image.asset(
+              'assets/icons/acme.jpg',
+              height: 170,
+              width: 170,
+            ),
+            const SizedBox(height: 70),
             MyTextFormField(
               currentValue: _userEmail,
               onChanged: (value) {
@@ -115,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                     Navigator.of(context).pushReplacementNamed('/workplaces');
                   },
                   child: Text(
-                    'Log In',
+                    LOGIN,
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary),
                   ),
@@ -129,9 +128,13 @@ class _LoginPageState extends State<LoginPage> {
               },
               child: Text(
                 SINGUP_MESSAGE,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
+            const SizedBox(height: 100),
           ],
         ),
       ),

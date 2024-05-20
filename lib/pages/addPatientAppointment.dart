@@ -100,15 +100,15 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               DateFormField(
-                hintText: 'Dia da consulta',
+                hintText: APPOINTMENT_DATE,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Fill';
+                    return FILL;
                   }
                   return null;
                 },
                 currentValue: _date.text,
-                labelText: 'Consulta',
+                labelText: APPOINTMENT,
                 onChanged: (value) {
                   _date.text = value;
                 },
@@ -128,9 +128,9 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                         try {
                           if (_date.text == "" || _appointment.text == "") {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text(
-                                  "Por favor preencha todos os campos",
+                                  FILL,
                                 ),
                               ),
                             );
@@ -161,7 +161,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
                           print('Banana $e');
                         }
                       },
-                      child: Text('Save history',
+                      child: Text(SAVE,
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary)))
                 ],

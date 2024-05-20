@@ -5,7 +5,6 @@ import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
-import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AccountCreationPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -23,12 +22,6 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(
-        context,
-        actionButtonFuntion: null,
-        appbarTitle: "My testing page",
-        iconType: 3,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -62,7 +55,7 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                 focusNode: null,
                 nextFocusNode: null,
                 obscureText: true,
-                labelText: "Password",
+                labelText: PASSWORD,
               ),
               const SizedBox(height: 16.0),
               MyTextFormField(
@@ -72,11 +65,11 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                 focusNode: null,
                 nextFocusNode: null,
                 obscureText: true,
-                labelText: "Confirm password",
+                labelText: PASSWORD_CONF,
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 30.0),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   const SizedBox(width: 100),
                   ElevatedButton(
@@ -89,13 +82,12 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                       }
                       if (model.password != confirmPasswords) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text("Passwords need to match")),
+                          SnackBar(content: Text(PASSWORD_MATCH)),
                         );
                         return;
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Creating user")),
+                        SnackBar(content: Text(CREATING_USER)),
                       );
 
                       var res = await createUser(model);
@@ -110,7 +102,7 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                       Navigator.popAndPushNamed(context, '/login');
                     },
                     child: Text(
-                      'Create account',
+                      CREATEACCOUNT,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary),
                     ),

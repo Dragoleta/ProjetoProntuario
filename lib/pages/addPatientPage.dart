@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
@@ -14,7 +15,6 @@ class AddPatientPage extends StatefulWidget {
   State<AddPatientPage> createState() => _AddPatientPageState();
 }
 
-// TODO: implement user interface a nd add database
 class _AddPatientPageState extends State<AddPatientPage> {
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,6 @@ class _AddPatientPageState extends State<AddPatientPage> {
     return Scaffold(
       appBar: customAppBar(
         context,
-        // TODO: get hid of the add button on the appBar
         actionButtonFuntion: () async {
           setState(() {});
         },
@@ -50,7 +49,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
             ),
           ),
           ElevatedButton(
-              child: const Text('Continue'),
+              child: Text(CONTINUE),
               onPressed: () {
                 Patient? patient = widget.localStorage.getPatientCreation();
                 if (null != patient?.name) {
