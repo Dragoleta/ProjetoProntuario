@@ -20,6 +20,15 @@ class WorkplacePage extends StatefulWidget {
 bool __addPressed = false;
 
 class _WorkplacePageState extends State<WorkplacePage> {
+  List<String>? token;
+  late Future<List<Workplace>?>? workplaces;
+  @override
+  void initState() {
+    super.initState();
+    token = widget.localStorage.getActiveAuthToken();
+    workplaces = getAllWorkplaces(token);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,49 +51,48 @@ class _WorkplacePageState extends State<WorkplacePage> {
           ],
         ));
   }
-}
 
-FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
-    LocalStorage localStorage) {
-  List<String>? token = localStorage.getActiveAuthToken();
-
-  return FutureBuilder<List<Workplace>?>(
-    future: getAllWorkplaces(token),
-    builder: (context, AsyncSnapshot<List<Workplace>?> snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasData) {
-        if (snapshot.data == null) {
+  FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
+      LocalStorage localStorage) {
+    return FutureBuilder<List<Workplace>?>(
+      future: workplaces,
+      builder: (context, AsyncSnapshot<List<Workplace>?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else if (snapshot.hasData) {
+          if (snapshot.data == null) {
+            return Text(NO_WORKPLACES);
+          }
+          return ListView.builder(
+            itemCount: snapshot.data?.length,
+            itemBuilder: (context, index) {
+              Workplace workplace = snapshot.data![index];
+              return MyCardWidget(
+                cardTitle: workplace.name,
+                gestureOnTap: () {
+                  localStorage.setCurrentWorkplace(workplace);
+                  Navigator.of(context).pushNamed('/patients');
+                },
+                iconOnPress: () async {
+                  var authToken = localStorage.getActiveAuthToken();
+                  if (authToken == null) {
+                    return;
+                  }
+                  bool? response =
+                      await deleteWorkplace(authToken, workplace.id);
+                  if (response == true) {
+                    Navigator.of(context).popAndPushNamed('/workplaces');
+                  }
+                },
+              );
+            },
+          );
+        } else {
           return Text(NO_WORKPLACES);
         }
-        return ListView.builder(
-          itemCount: snapshot.data?.length,
-          itemBuilder: (context, index) {
-            Workplace workplace = snapshot.data![index];
-            return MyCardWidget(
-              cardTitle: workplace.name,
-              gestureOnTap: () {
-                localStorage.setCurrentWorkplace(workplace);
-                Navigator.of(context).pushNamed('/patients');
-              },
-              iconOnPress: () async {
-                var authToken = localStorage.getActiveAuthToken();
-                if (authToken == null) {
-                  return;
-                }
-                bool? response = await deleteWorkplace(authToken, workplace.id);
-                if (response == true) {
-                  Navigator.of(context).popAndPushNamed('/workplaces');
-                }
-              },
-            );
-          },
-        );
-      } else {
-        return Text(NO_WORKPLACES);
-      }
-    },
-  );
+      },
+    );
+  }
 }
 
 class AddPlaceCard extends StatelessWidget {

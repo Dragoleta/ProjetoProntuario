@@ -17,9 +17,20 @@ class PatientsPage extends StatefulWidget {
 }
 
 class _PatientsPageState extends State<PatientsPage> {
+  Workplace? workplace;
+  late Future<List<Patient>?>? patients;
+  List<String>? token;
+
+  @override
+  void initState() {
+    super.initState();
+    workplace = widget.localStorage.getCurrentWorkplace();
+    token = widget.localStorage.getActiveAuthToken();
+    patients = getAllPatients(token);
+  }
+
   @override
   Widget build(BuildContext context) {
-    Workplace? workplace = widget.localStorage.getCurrentWorkplace();
     return Scaffold(
       appBar: customAppBar(
         context,
@@ -41,11 +52,8 @@ class _PatientsPageState extends State<PatientsPage> {
   }
 
   FutureBuilder<List<Patient>?> patientsCardsBuilder(LocalStorage storage) {
-    Workplace? workplace = storage.getCurrentWorkplace();
-    List<String>? token = storage.getActiveAuthToken();
-
     return FutureBuilder<List<Patient>?>(
-      future: getAllPatients(token),
+      future: patients,
       builder: (context, AsyncSnapshot<List<Patient>?> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
