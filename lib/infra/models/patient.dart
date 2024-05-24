@@ -104,4 +104,13 @@ class Patient {
         MOTHER_NAME,
         FATHER_NAME,
       ];
+
+  List getValues() => [
+        name,
+        sex,
+        convertBirthdate(birthdate),
+        diagnose,
+        motherName,
+        fatherName,
+      ];
 }

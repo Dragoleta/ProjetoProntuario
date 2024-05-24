@@ -38,7 +38,7 @@ class _AddPatientPageV2State extends State<AddPatientPageV2> {
           appbarTitle: ADD_PATIENT,
           iconType: 0,
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Form(
           key: _formKey,
           child: Column(

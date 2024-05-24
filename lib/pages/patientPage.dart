@@ -1,52 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:prontuario_flutter/components/patient_appointment_card_builder.dart';
-import 'package:prontuario_flutter/config/langs/ptbr.dart';
-import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
-import 'package:prontuario_flutter/widgets/appbar.dart';
 
-class PatientPage extends StatefulWidget {
-  final LocalStorage localStorage;
-  const PatientPage({super.key, required this.localStorage});
-
-  @override
-  State<PatientPage> createState() => _PatientPageState();
-}
-
-class _PatientPageState extends State<PatientPage> {
-  @override
-  Widget build(BuildContext context) {
-    Patient? currentPatient = widget.localStorage.getCurrentPatient();
-    List patientFields = Patient().getPatientsList();
-
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: customAppBar(
-        context,
-        actionButtonFuntion: () async {
-          Navigator.of(context).pushNamed('/patients/patient/addAppointment');
-
-          setState(() {});
-        },
-        appbarTitle: currentPatient?.name ?? PATIENT,
-        iconType: 0,
-      ),
-      body: Column(
-        children: [
-          PatientInfo(
-            patientFields: patientFields,
-            currentPatient: currentPatient,
-          ),
-          Expanded(child: patientAppointmentCardBuilder(widget.localStorage))
-        ],
-      ),
-    );
-  }
-}
-
-class PatientInfo extends StatelessWidget {
+class PatientInfoOri extends StatelessWidget {
   final Patient? currentPatient;
-  const PatientInfo({
+  const PatientInfoOri({
     super.key,
     required this.patientFields,
     required this.currentPatient,
@@ -93,6 +50,32 @@ class PatientInfo extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class PatientInfo extends StatelessWidget {
+  final Patient? currentPatient;
+
+  const PatientInfo({
+    super.key,
+    required this.currentPatient,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Size size = MediaQuery.of(context).size;
+    List patientFields = currentPatient!.getPatientsList();
+    var test = currentPatient?.getValues();
+    return ListView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: 6,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Text(patientFields[index] + ":"),
+          subtitle: Text(test?[index] ?? "Not found"),
+        );
+      },
     );
   }
 }

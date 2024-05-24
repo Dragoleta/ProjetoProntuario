@@ -26,7 +26,7 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: customAppBar(
         context,
         actionButtonFuntion: () {
@@ -63,8 +63,8 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
     if (__activeWidget == 1) {
       return ElevatedButton(
         style: ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll(
-                Theme.of(context).colorScheme.primary)),
+            backgroundColor:
+                WidgetStatePropertyAll(Theme.of(context).colorScheme.primary)),
         onPressed: () async {
           bool res = await updatePatientHistory(
               currentHistory.text, currentHistory.id, authToken);

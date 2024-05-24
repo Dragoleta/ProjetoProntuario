@@ -36,7 +36,7 @@ class _WorkplacePageState extends State<WorkplacePage> {
           __addPressed = true;
           setState(() {});
         }, appbarTitle: WORKPLACE, iconType: 0),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
             Builder(builder: (context) {

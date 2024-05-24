@@ -37,7 +37,6 @@ class _PatientProfileState extends State<PatientProfile> {
         ],
       ),
       PatientInfo(
-        patientFields: Patient().getPatientsList(),
         currentPatient: currentPatient,
       ),
       Center(

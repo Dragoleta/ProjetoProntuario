@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/config/themes/input_decorator.dart';
 
 ColorScheme lightColorScheme = const ColorScheme.light(
-  background: Color.fromRGBO(215, 213, 215, 1),
+  surface: Color.fromRGBO(215, 213, 215, 1),
   primary: Color.fromRGBO(32, 111, 52, 1),
   secondary: Colors.white,
   tertiary: Color.fromRGBO(7, 30, 34, 1),
@@ -10,7 +10,7 @@ ColorScheme lightColorScheme = const ColorScheme.light(
 );
 
 ColorScheme darkColorScheme = const ColorScheme.dark(
-  background: Color.fromRGBO(8, 33, 32, 1),
+  surface: Color.fromRGBO(8, 33, 32, 1),
   primary: Color.fromRGBO(29, 120, 116, 1),
   secondary: Color.fromRGBO(204, 204, 204, 1),
   tertiary: Color.fromRGBO(1, 1, 20, 1),
@@ -19,10 +19,10 @@ ColorScheme darkColorScheme = const ColorScheme.dark(
 
 ElevatedButtonThemeData lightButtonTheme = ElevatedButtonThemeData(
     style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(lightColorScheme.primary)));
+        backgroundColor: WidgetStatePropertyAll(lightColorScheme.primary)));
 ElevatedButtonThemeData darkButtonTheme = ElevatedButtonThemeData(
     style: ButtonStyle(
-  backgroundColor: MaterialStatePropertyAll(darkColorScheme.primary),
+  backgroundColor: WidgetStatePropertyAll(darkColorScheme.primary),
 ));
 
 ThemeData lightMode = ThemeData(
@@ -31,6 +31,7 @@ ThemeData lightMode = ThemeData(
   primaryColor: lightColorScheme.primary,
   colorScheme: lightColorScheme,
   elevatedButtonTheme: lightButtonTheme,
+  scaffoldBackgroundColor: lightColorScheme.surface,
 );
 
 ThemeData darkMode = ThemeData(
@@ -39,4 +40,5 @@ ThemeData darkMode = ThemeData(
   primaryColor: darkColorScheme.primary,
   colorScheme: darkColorScheme,
   elevatedButtonTheme: darkButtonTheme,
+  scaffoldBackgroundColor: darkColorScheme.surface,
 );
