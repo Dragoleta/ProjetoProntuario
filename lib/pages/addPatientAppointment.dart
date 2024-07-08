@@ -24,12 +24,14 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   final TextEditingController _appointment = TextEditingController();
 
   final SpeechToText _speechToText = SpeechToText();
-  bool _speechEnabled = false;
+  // ignore: unused_field
+  late bool _speechEnabled;
   String _wordsSpoken = "";
 
   @override
   void initState() {
     super.initState();
+    _speechEnabled = false;
     initSpeech();
   }
 

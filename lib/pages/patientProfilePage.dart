@@ -98,9 +98,12 @@ class _PatientProfileState extends State<PatientProfile> {
                 Icons.add,
                 color: Theme.of(context).colorScheme.secondary,
               ),
-              onPressed: () {
-                Navigator.of(context)
+              onPressed: () async {
+                await Navigator.of(context)
                     .pushNamed('/patients/patient/addAppointment');
+                setState(() {
+                  _pages = _buildPages();
+                });
               },
             )
           : null,

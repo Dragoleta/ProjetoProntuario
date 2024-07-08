@@ -19,14 +19,14 @@ class PatientsPage extends StatefulWidget {
 class _PatientsPageState extends State<PatientsPage> {
   Workplace? workplace;
   late Future<List<Patient>?>? patients;
-  List<String>? token;
+  List<String>? authToken;
 
   @override
   void initState() {
     super.initState();
     workplace = widget.localStorage.getCurrentWorkplace();
-    token = widget.localStorage.getActiveAuthToken();
-    patients = getAllPatients(token);
+    authToken = widget.localStorage.getActiveAuthToken();
+    patients = getAllPatients(authToken);
   }
 
   @override
@@ -35,8 +35,11 @@ class _PatientsPageState extends State<PatientsPage> {
       appBar: customAppBar(
         context,
         actionButtonFuntion: () async {
-          Navigator.of(context).pushNamed('/patients/add');
-          setState(() {});
+          await Navigator.of(context).pushNamed('/patients/add');
+
+          setState(() {
+            patients = getAllPatients(authToken);
+          });
         },
         appbarTitle: workplace!.name,
         iconType: 0,
@@ -82,7 +85,7 @@ class _PatientsPageState extends State<PatientsPage> {
                   }
                   bool? response = await deletePatient(authToken, patient.id);
                   if (response == true) {
-                    setState(() {});
+                    setState(() => patients = getAllPatients(authToken));
                   }
                 },
               );

@@ -37,7 +37,7 @@ class LocalStorage {
     patientCreation = patient;
   }
 
-  String? getCurrentProfessionalId() {
+  String getCurrentProfessionalId() {
     return currentProfessional?.id ?? '';
   }
 

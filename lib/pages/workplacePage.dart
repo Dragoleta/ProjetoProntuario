@@ -17,16 +17,17 @@ class WorkplacePage extends StatefulWidget {
   State<WorkplacePage> createState() => _WorkplacePageState();
 }
 
-bool __addPressed = false;
-
 class _WorkplacePageState extends State<WorkplacePage> {
   List<String>? token;
   late Future<List<Workplace>?>? workplaces;
+  late bool __addPressed;
+
   @override
   void initState() {
     super.initState();
     token = widget.localStorage.getActiveAuthToken();
     workplaces = getAllWorkplaces(token);
+    __addPressed = false;
   }
 
   @override
@@ -41,7 +42,7 @@ class _WorkplacePageState extends State<WorkplacePage> {
           children: [
             Builder(builder: (context) {
               if (__addPressed == true) {
-                return AddPlaceCard(localStorage: widget.localStorage);
+                return addPlaceCard(widget.localStorage, context);
               }
               return const SizedBox();
             }),
@@ -50,6 +51,35 @@ class _WorkplacePageState extends State<WorkplacePage> {
             ),
           ],
         ));
+  }
+
+  Widget addPlaceCard(LocalStorage localStorage, BuildContext context) {
+    String professionalId = localStorage.getCurrentProfessionalId();
+    List<String>? authToken = localStorage.getActiveAuthToken();
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+      child: TextField(
+        onSubmitted: (value) async {
+          Workplace newPlace = Workplace(
+            name: value,
+            professional_Id: professionalId,
+          );
+          bool res = await createWorkplace(newPlace, authToken);
+          if (res == true) {
+            setState(() {
+              __addPressed = false;
+              workplaces = getAllWorkplaces(authToken);
+            });
+            //  addPressed = false;
+          }
+        },
+        obscureText: false,
+        style: TextStyle(fontSize: 18, color: Colors.grey[900]),
+        decoration: InputDecoration(
+          labelText: WORKPLACE,
+        ),
+      ),
+    );
   }
 
   FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
@@ -80,8 +110,12 @@ class _WorkplacePageState extends State<WorkplacePage> {
                   }
                   bool? response =
                       await deleteWorkplace(authToken, workplace.id);
+
                   if (response == true) {
-                    Navigator.of(context).popAndPushNamed('/workplaces');
+                    setState(() {
+                      __addPressed = false;
+                      workplaces = getAllWorkplaces(authToken);
+                    });
                   }
                 },
               );
@@ -91,40 +125,6 @@ class _WorkplacePageState extends State<WorkplacePage> {
           return Text(NO_WORKPLACES);
         }
       },
-    );
-  }
-}
-
-class AddPlaceCard extends StatelessWidget {
-  final LocalStorage localStorage;
-
-  const AddPlaceCard({super.key, required this.localStorage});
-
-  @override
-  Widget build(BuildContext context) {
-    String? professionalId = localStorage.getCurrentProfessionalId();
-    List<String>? authToken = localStorage.getActiveAuthToken();
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
-      child: TextField(
-        onSubmitted: (value) async {
-          Workplace newPlace = Workplace(
-            name: value,
-            professional_Id: professionalId!,
-          );
-          bool res = await createWorkplace(newPlace, authToken);
-          if (res == true) {
-            __addPressed = false;
-
-            Navigator.of(context).popAndPushNamed('/workplaces');
-          }
-        },
-        obscureText: false,
-        style: TextStyle(fontSize: 18, color: Colors.grey[900]),
-        decoration: InputDecoration(
-          labelText: WORKPLACE,
-        ),
-      ),
     );
   }
 }

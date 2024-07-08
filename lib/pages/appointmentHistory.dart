@@ -15,16 +15,24 @@ class AppointmentHistoryPage extends StatefulWidget {
 }
 
 class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
-  int __activeWidget = 0;
+  late int __activeWidget;
+  Patient? currentPatient;
+  PatientHistory? currentHistory;
+  List<String>? authToken;
+  late Size size;
+
+  @override
+  void initState() {
+    super.initState();
+    __activeWidget = 0;
+    currentPatient = widget.localStorage.getCurrentPatient();
+    currentHistory = widget.localStorage.getCurrentAppointment();
+    authToken = widget.localStorage.getActiveAuthToken();
+    size = MediaQuery.of(context).size;
+  }
 
   @override
   Widget build(BuildContext context) {
-    Patient? currentPatient = widget.localStorage.getCurrentPatient();
-    PatientHistory? currentHistory =
-        widget.localStorage.getCurrentAppointment();
-    var authToken = widget.localStorage.getActiveAuthToken();
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: customAppBar(
@@ -44,7 +52,7 @@ class _AppointmentHistoryPageState extends State<AppointmentHistoryPage> {
             width: size.width,
             child: textLocal(size, currentHistory!, widget.localStorage),
           ),
-          saveButton(currentHistory, authToken)
+          saveButton(currentHistory!, authToken)
         ],
       ),
       // ,
