@@ -73,7 +73,6 @@ class PatientHistoryCard extends StatelessWidget {
                 bool? response =
                     await deletePatientHistory(authToken, history.id);
                 if (response == true) {
-                  // Navigator.of(context).popAndPushNamed('/patients/patient');
                   Navigator.of(context).pop();
                 }
               },
