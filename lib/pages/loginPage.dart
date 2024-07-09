@@ -18,10 +18,12 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   User? userFromLocalDB;
   String _userEmail = "";
+  bool isloading = false;
 
   @override
   void initState() {
     super.initState();
+    isloading;
     _getUserFromLocalDB();
   }
 
@@ -44,6 +46,22 @@ class _LoginPageState extends State<LoginPage> {
 
     widget.localStorage.setCurrentProfessional(user);
     return;
+  }
+
+  Widget loginButton() {
+    Widget loading = CircularProgressIndicator(
+      color: Theme.of(context).colorScheme.secondary,
+      strokeAlign: BorderSide.strokeAlignInside,
+      strokeWidth: 4,
+      strokeCap: StrokeCap.square,
+    );
+
+    Widget button = Text(
+      LOGIN,
+      style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+    );
+
+    return isloading ? loading : button;
   }
 
   @override
@@ -101,8 +119,11 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
+                    setState(() => isloading = true);
                     var res = await loginApi(_userEmail, userPassword);
                     if (res == '') {
+                      setState(() => isloading = false);
+                      if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(WRONG_PASSWORD_OR_EMAIL)),
                       );
@@ -110,14 +131,10 @@ class _LoginPageState extends State<LoginPage> {
                     }
                     widget.localStorage.setActiveAuthToken(res);
                     await _setActiveUser();
-
+                    if (!context.mounted) return;
                     Navigator.of(context).pushReplacementNamed('/workplaces');
                   },
-                  child: Text(
-                    LOGIN,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
+                  child: loginButton(),
                 ),
               ],
             ),
