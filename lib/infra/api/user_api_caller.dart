@@ -37,7 +37,7 @@ Future<String> loginApi(String userEmail, String userPassword) async {
   }
 }
 
-Future<User?>? whoAmI(token) async {
+Future<UserModel?>? whoAmI(token) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/user/me');
 
@@ -55,7 +55,7 @@ Future<User?>? whoAmI(token) async {
     }
 
     dynamic jsonBody = json.decode(res.body);
-    User user = User.fromJson(jsonBody);
+    UserModel user = UserModel.fromJson(jsonBody);
     return user;
   } catch (e) {
     print('Banana $e');
@@ -63,10 +63,9 @@ Future<User?>? whoAmI(token) async {
   return null;
 }
 
-Future<bool> createUser(User user) async {
+Future<bool> createUser(UserModel user) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/user/create_user');
-    user.deleted = false;
     user.createdAt = null;
 
     http.Response res = await http.post(
@@ -74,7 +73,7 @@ Future<bool> createUser(User user) async {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: user.toJSONApi(),
+      body: user.toJson(),
     );
 
     if (res.statusCode != 200) {

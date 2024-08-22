@@ -3,7 +3,6 @@ import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
-import 'package:prontuario_flutter/infra/repositories/patients_repo.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
 
 class AddPatientPage extends StatefulWidget {
@@ -52,9 +51,7 @@ class _AddPatientPageState extends State<AddPatientPage> {
               child: Text(CONTINUE),
               onPressed: () {
                 Patient? patient = widget.localStorage.getPatientCreation();
-                if (null != patient?.name) {
-                  PatientsRepo().addPatient(patient!);
-                }
+
                 Navigator.of(context).pushNamed('/patients');
                 setState(() {});
               })

@@ -72,7 +72,7 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   Widget build(BuildContext context) {
     Patient? patient = widget.localStorage.getCurrentPatient();
     Workplace? workplace = widget.localStorage.getCurrentWorkplace();
-    User? professional = widget.localStorage.getCurrentProfessional();
+    UserModel? professional = widget.localStorage.getCurrentProfessional();
     var authToken = widget.localStorage.getActiveAuthToken();
 
     return Scaffold(

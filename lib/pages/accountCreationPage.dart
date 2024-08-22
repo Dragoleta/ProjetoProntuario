@@ -4,7 +4,6 @@ import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
-import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
 
 class AccountCreationPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -17,7 +16,7 @@ class AccountCreationPage extends StatefulWidget {
 
 class _AccountCreationPageState extends State<AccountCreationPage> {
   final formKey = GlobalKey<FormState>();
-  var model = User();
+  var model = UserModel();
   var confirmPasswords;
   @override
   Widget build(BuildContext context) {
@@ -97,7 +96,6 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                         );
                         return;
                       }
-                      UserRepo().addUser(model);
 
                       Navigator.popAndPushNamed(context, '/login');
                     },

@@ -1,122 +1,120 @@
 import "package:flutter/material.dart";
 import "package:prontuario_flutter/config/langs/ptbr.dart";
-import "package:prontuario_flutter/infra/api/workplaces_api_caller.dart";
-import "package:prontuario_flutter/infra/localstorage/local_storage.dart";
+import "package:prontuario_flutter/infra/api/api_status.dart";
+import "package:prontuario_flutter/infra/api/workplace_services.dart";
 import "package:prontuario_flutter/infra/models/workplace.dart";
+import "package:prontuario_flutter/infra/view_models/user_view_model.dart";
 import "package:prontuario_flutter/widgets/appbar.dart";
 import "package:prontuario_flutter/widgets/card_widget.dart";
+import "package:provider/provider.dart";
 
 class WorkplacePage extends StatefulWidget {
-  final LocalStorage localStorage;
-  const WorkplacePage({
-    super.key,
-    required this.localStorage,
-  });
+  const WorkplacePage({super.key});
 
   @override
   State<WorkplacePage> createState() => _WorkplacePageState();
 }
 
-bool __addPressed = false;
-
 class _WorkplacePageState extends State<WorkplacePage> {
-  List<String>? token;
-  late Future<List<Workplace>?>? workplaces;
+  late bool __addPressed = false;
   @override
   void initState() {
     super.initState();
-    token = widget.localStorage.getActiveAuthToken();
-    workplaces = getAllWorkplaces(token);
+    __addPressed;
   }
 
   @override
   Widget build(BuildContext context) {
+    UserViewModel userViewModel = context.watch<UserViewModel>();
+
     return Scaffold(
         appBar: customAppBar(context, actionButtonFuntion: () {
-          __addPressed = true;
-          setState(() {});
+          setState(() {
+            __addPressed = true;
+          });
         }, appbarTitle: WORKPLACE, iconType: 0),
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
-            Builder(builder: (context) {
-              if (__addPressed == true) {
-                return AddPlaceCard(localStorage: widget.localStorage);
-              }
-              return const SizedBox();
-            }),
-            Expanded(
-              child: workplacesCardsBuilder(widget.localStorage),
+            Visibility(
+              child: _addCardTextField(userViewModel),
+              visible: __addPressed,
             ),
+            Expanded(child: _ui(userViewModel)),
           ],
         ));
   }
 
-  FutureBuilder<List<Workplace>?> workplacesCardsBuilder(
-      LocalStorage localStorage) {
-    return FutureBuilder<List<Workplace>?>(
-      future: workplaces,
-      builder: (context, AsyncSnapshot<List<Workplace>?> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasData) {
-          if (snapshot.data == null) {
-            return Text(NO_WORKPLACES);
-          }
-          return ListView.builder(
-            itemCount: snapshot.data?.length,
+  _ui(UserViewModel usersView) {
+    if (usersView.loading) {
+      return const CircularProgressIndicator();
+    }
+
+    if (usersView.userError != null) {
+      return Container();
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: usersView.user!.workplaces!.length,
             itemBuilder: (context, index) {
-              Workplace workplace = snapshot.data![index];
-              return MyCardWidget(
-                cardTitle: workplace.name,
-                gestureOnTap: () {
-                  localStorage.setCurrentWorkplace(workplace);
-                  Navigator.of(context).pushNamed('/patients');
-                },
-                iconOnPress: () async {
-                  var authToken = localStorage.getActiveAuthToken();
-                  if (authToken == null) {
-                    return;
-                  }
-                  bool? response =
-                      await deleteWorkplace(authToken, workplace.id);
-                  if (response == true) {
-                    Navigator.of(context).popAndPushNamed('/workplaces');
-                  }
-                },
+              Workplace workplace = usersView.user!.workplaces![index];
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                    vertical: 4.0), // Optional margin
+                child: MyCardWidget(
+                  cardTitle: workplace.name,
+                  gestureOnTap: () {
+                    // goto patients and send workplace.patiens to the builder
+                    context.read<UserViewModel>().setWorkplace(workplace);
+                    Navigator.of(context).pushNamed('/patients');
+                  },
+                  iconOnPress: () async {
+                    await WorkplaceServices.deleteWorkplace(
+                      usersView.authToken!,
+                      workplace.id!,
+                    );
+                    usersView
+                        .getUser(); // Ensure this method doesn't cause side effects
+                  },
+                ),
               );
             },
-          );
-        } else {
-          return Text(NO_WORKPLACES);
-        }
-      },
+          ),
+        ),
+      ],
     );
   }
-}
 
-class AddPlaceCard extends StatelessWidget {
-  final LocalStorage localStorage;
-
-  const AddPlaceCard({super.key, required this.localStorage});
-
-  @override
-  Widget build(BuildContext context) {
-    String? professionalId = localStorage.getCurrentProfessionalId();
-    List<String>? authToken = localStorage.getActiveAuthToken();
+  _addCardTextField(UserViewModel usersView) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
       child: TextField(
         onSubmitted: (value) async {
           Workplace newPlace = Workplace(
             name: value,
-            professional_Id: professionalId!,
+            patients: [],
           );
-          bool res = await createWorkplace(newPlace, authToken);
-          if (res == true) {
-            __addPressed = false;
+          // bool res = await createWorkplace(newPlace, authToken);
+          var response = await WorkplaceServices.createWorkplace(
+            newPlace,
+            usersView.authToken!,
+          );
 
-            Navigator.of(context).popAndPushNamed('/workplaces');
+          if (response is Failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(WORKPLACE_CREATION_ERROR)),
+            );
+            return;
+          }
+
+          if (response is Success) {
+            usersView.getUser();
+            setState(() {
+              __addPressed = false;
+            });
           }
         },
         obscureText: false,

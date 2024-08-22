@@ -30,6 +30,7 @@ String NULL_VALUE_ERROR = 'Por favor preencha esse campo';
 String WRONG_PASSWORD_OR_EMAIL = "E-mail ou senha são invalidas";
 String SINGUP_MESSAGE = "Não possui uma conta? Registre-se";
 String PASSWORD_MATCH = "As senhas precisam ser iguas";
+String WORKPLACE_CREATION_ERROR = "Nao foi possivel criar o local de trabalho";
 
 String PATIENT = 'Paciente';
 String NAME = 'Nome';

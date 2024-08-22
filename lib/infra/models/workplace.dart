@@ -1,35 +1,30 @@
-import 'dart:convert';
+import 'package:prontuario_flutter/infra/models/simple_patient.dart';
 
 class Workplace {
   String? id;
   String name;
-  String professional_Id;
+  List<SimplePatient> patients;
   String? createdAt;
-  bool? deleted;
 
   Workplace({
     this.id,
     required this.name,
-    required this.professional_Id,
+    required this.patients,
     this.createdAt,
-    this.deleted,
   });
 
   factory Workplace.fromJson(Map<String, dynamic> json) => Workplace(
-        id: json['id'],
-        name: json['name'],
-        professional_Id: json['professional_id'],
-        createdAt: json['created_at'],
-        deleted: json['deleted'],
+        id: json["id"],
+        name: json["name"],
+        patients: List<SimplePatient>.from(
+            json["patients"].map((x) => SimplePatient.fromJson(x))),
+        createdAt: json["createdAt"],
       );
 
-  String toJSON() {
-    return jsonEncode(<String, dynamic>{
-      "id": id,
-      "name": name,
-      'professional_id': professional_Id,
-      if (createdAt != null) "createdAt": createdAt,
-      if (deleted != null) "deleted": deleted
-    });
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "patients": List<dynamic>.from(patients.map((x) => x.toJson())),
+        "createdAt": createdAt,
+      };
 }

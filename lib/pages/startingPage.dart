@@ -23,20 +23,13 @@ class _StartPageState extends State<StartPage> {
       body: Center(
         child: ElevatedButton(
           style: ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(
+              backgroundColor: WidgetStatePropertyAll(
                   Theme.of(context).colorScheme.primary)),
           child: Text(
             SIGNIN,
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () async {
-            bool hasProfessional =
-                await checkHasProfessinal(widget.localStorage);
-
-            if (false == hasProfessional) {
-              Navigator.popAndPushNamed(context, '/sigin');
-            }
-
             await loginHelper(widget.localStorage, context);
           },
         ),

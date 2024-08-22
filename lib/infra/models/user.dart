@@ -1,36 +1,31 @@
 import 'dart:convert';
 
-class User {
+import 'package:prontuario_flutter/infra/models/workplace.dart';
+
+UserModel welcomeFromJson(String str) => UserModel.fromJson(json.decode(str));
+
+String welcomeToJson(UserModel data) => json.encode(data.toJson());
+
+class UserModel {
   String? id;
   String? name;
   String? email;
   String? password;
   String? phoneNumber;
-  DateTime? createdAt;
-  bool? deleted;
+  String? createdAt;
+  List<Workplace>? workplaces;
   bool? valid;
 
-  User(
-      {this.id,
-      this.name,
-      this.email,
-      this.password,
-      this.phoneNumber,
-      this.createdAt,
-      this.deleted,
-      this.valid});
-
-  User copyWith({
-    String? name,
-    String? email,
-    String? password,
-  }) {
-    return User(
-      name: name ?? this.name,
-      email: email ?? this.email,
-      password: password ?? this.password,
-    );
-  }
+  UserModel({
+    this.id,
+    this.name,
+    this.email,
+    this.password,
+    this.phoneNumber,
+    this.createdAt,
+    this.workplaces,
+    this.valid,
+  });
 
   String? isEmptyValidator(String? value) {
     if (value == null || value.isEmpty) {
@@ -57,36 +52,28 @@ class User {
     return null;
   }
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json['id'],
-        name: json['name'],
-        email: json['email'],
-        phoneNumber: json['phoneNumber'],
+  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        id: json["_id"],
+        name: json["name"],
+        email: json["email"],
+        phoneNumber: json["phone_number"],
         password: json["password"],
-        createdAt: json['createdAt'],
+        workplaces: List<Workplace>.from(
+            json["workplaces"].map((x) => Workplace.fromJson(x))),
+        createdAt: json["createdAt"],
       );
-
-  Map<String, dynamic> toJSON() => {
-        'name': name,
-        'email': email,
-        "password": password,
-        if (phoneNumber != null) 'phone_number': phoneNumber,
-        if (createdAt != null) 'createdAt': createdAt,
-        if (deleted != null) 'deleted': deleted
-      };
 
   Map<String, dynamic> toJSONLocalDB() => {
         'email': email,
       };
 
-  String toJSONApi() {
-    return jsonEncode(<String, dynamic>{
-      "user_email": email,
-      "user_name": name,
-      "password": password,
-      if (phoneNumber != null) "phone_number": phoneNumber,
-      if (createdAt != null) "createdAt": createdAt,
-      if (deleted != null) "deleted": deleted
-    });
-  }
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "name": name,
+        "email": email,
+        "phone_number": phoneNumber,
+        "password": password,
+        "workplaces": List<dynamic>.from(workplaces!.map((x) => x.toJson())),
+        "createdAt": createdAt,
+      };
 }

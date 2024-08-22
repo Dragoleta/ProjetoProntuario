@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/components/text_formField.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
+import 'package:prontuario_flutter/infra/api/api_status.dart';
 import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
+import 'package:prontuario_flutter/infra/api/user_services.dart';
 import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
-import 'package:prontuario_flutter/infra/repositories/user_repo.dart';
+import 'package:prontuario_flutter/infra/view_models/user_view_model.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final LocalStorage localStorage;
@@ -16,40 +19,40 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  User? userFromLocalDB;
+  late UserModel userFromLocalDB;
   String _userEmail = "";
+  late String userPassword;
 
   @override
   void initState() {
     super.initState();
-    _getUserFromLocalDB();
   }
 
-  void _getUserFromLocalDB() async {
-    userFromLocalDB = await UserRepo().getUserFromLocalDB();
-    _userEmail = userFromLocalDB!.email!;
-    setState(() {});
-  }
+  void _loginUserCall() async {
+    var response = await UserServices.loginUser('jorge@example.com', '1234');
 
-  Future<void> _setActiveUser() async {
-    User? user = await whoAmI(widget.localStorage.getActiveAuthToken());
-
-    if (user == null) {
+    if (response is Failure) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(WRONG_PASSWORD_OR_EMAIL)),
+      );
       return;
     }
 
-    if (userFromLocalDB == null) {
-      UserRepo().addUser(user);
+    if (response is Success) {
+      context.read<UserViewModel>().setAuthToken(response.response);
+      Navigator.of(context).pushReplacementNamed('/workplaces');
     }
+  }
 
-    widget.localStorage.setCurrentProfessional(user);
+  Future<void> _setActiveUser() async {
+    UserModel? user = await whoAmI(widget.localStorage.getActiveAuthToken());
+
+    widget.localStorage.setCurrentProfessional(user!);
     return;
   }
 
   @override
   Widget build(BuildContext context) {
-    late String userPassword;
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -101,17 +104,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
-                    var res = await loginApi(_userEmail, userPassword);
-                    if (res == '') {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(WRONG_PASSWORD_OR_EMAIL)),
-                      );
-                      return;
-                    }
-                    widget.localStorage.setActiveAuthToken(res);
-                    await _setActiveUser();
-
-                    Navigator.of(context).pushReplacementNamed('/workplaces');
+                    _loginUserCall();
                   },
                   child: Text(
                     LOGIN,

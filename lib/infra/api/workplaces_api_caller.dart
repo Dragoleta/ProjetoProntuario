@@ -35,7 +35,7 @@ Future<List<Workplace>?>? getAllWorkplaces(authToken) async {
   }
 }
 
-Future<bool> createWorkplace(Workplace place, authToken) async {
+Future<bool> createWorkplaceAPI(Workplace place, authToken) async {
   try {
     Uri url = Uri.parse('${dotenv.env['API_URL']}/workplace/add_workplace');
 

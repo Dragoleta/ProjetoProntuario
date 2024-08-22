@@ -10,7 +10,7 @@ class LocalStorage {
   Patient? currentPatient;
   Patient? patientCreation;
   PatientHistory? currentHistory;
-  User? currentProfessional;
+  UserModel? currentProfessional;
   List<String>? authToken;
 
   Workplace? getCurrentWorkplace() {
@@ -41,11 +41,11 @@ class LocalStorage {
     return currentProfessional?.id ?? '';
   }
 
-  User? getCurrentProfessional() {
+  UserModel? getCurrentProfessional() {
     return currentProfessional;
   }
 
-  void setCurrentProfessional(User professional) {
+  void setCurrentProfessional(UserModel professional) {
     currentProfessional = professional;
   }
 
