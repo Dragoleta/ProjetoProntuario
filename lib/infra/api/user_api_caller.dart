@@ -32,7 +32,7 @@ Future<String> loginApi(String userEmail, String userPassword) async {
 
     return res.body;
   } catch (e) {
-    print('Banana $e');
+    print('Banana login $e');
     return 'error';
   }
 }
