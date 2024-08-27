@@ -8,25 +8,25 @@ import "package:prontuario_flutter/widgets/appbar.dart";
 import "package:prontuario_flutter/widgets/card_widget.dart";
 import "package:provider/provider.dart";
 
-class WorkplacePage extends StatefulWidget {
-  const WorkplacePage({super.key});
+class WorkplacesPage extends StatefulWidget {
+  const WorkplacesPage({super.key});
 
   @override
-  State<WorkplacePage> createState() => _WorkplacePageState();
+  State<WorkplacesPage> createState() => _WorkplacePageState();
 }
 
-class _WorkplacePageState extends State<WorkplacePage> {
+class _WorkplacePageState extends State<WorkplacesPage> {
   late bool __addPressed = false;
+  late UserViewModel userViewModel;
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     __addPressed;
+    userViewModel = context.watch<UserViewModel>();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserViewModel userViewModel = context.watch<UserViewModel>();
-
     return Scaffold(
         appBar: customAppBar(context, actionButtonFuntion: () {
           setState(() {
@@ -62,8 +62,7 @@ class _WorkplacePageState extends State<WorkplacePage> {
             itemBuilder: (context, index) {
               Workplace workplace = usersView.user!.workplaces![index];
               return Container(
-                margin: const EdgeInsets.symmetric(
-                    vertical: 4.0), // Optional margin
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 child: MyCardWidget(
                   cardTitle: workplace.name,
                   gestureOnTap: () {
@@ -76,8 +75,7 @@ class _WorkplacePageState extends State<WorkplacePage> {
                       usersView.authToken!,
                       workplace.id!,
                     );
-                    usersView
-                        .getUser(); // Ensure this method doesn't cause side effects
+                    usersView.getUser();
                   },
                 ),
               );
@@ -97,7 +95,6 @@ class _WorkplacePageState extends State<WorkplacePage> {
             name: value,
             patients: [],
           );
-          // bool res = await createWorkplace(newPlace, authToken);
           var response = await WorkplaceServices.createWorkplace(
             newPlace,
             usersView.authToken!,

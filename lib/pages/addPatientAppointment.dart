@@ -28,8 +28,8 @@ class _AddAppointmentPageState extends State<AddAppointmentPage> {
   String _wordsSpoken = "";
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     initSpeech();
   }
 
