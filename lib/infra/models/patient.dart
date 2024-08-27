@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:intl/intl.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
+import 'package:prontuario_flutter/infra/models/appointment.dart';
 
-class Patient {
+class PatientModel {
   String? id;
-  String? professional_Id;
-  String? workplaceID;
+  String? professionalId;
   String? name;
   String? diagnose;
   String? birthdate;
@@ -14,13 +12,12 @@ class Patient {
   String? motherName;
   String? fatherName;
   String? createdAt;
-  bool? deleted;
+  List<Appointment>? appointments;
   bool? valid;
 
-  Patient({
-    this.workplaceID,
+  PatientModel({
     this.id,
-    this.professional_Id,
+    this.professionalId,
     this.name,
     this.sex,
     this.diagnose,
@@ -28,11 +25,45 @@ class Patient {
     this.motherName,
     this.fatherName,
     this.createdAt,
-    this.deleted,
     this.valid,
+    this.appointments,
   });
 
-  Patient copyWith({
+  factory PatientModel.fromJson(Map<String, dynamic> json) => PatientModel(
+        id: json['id'],
+        professionalId: json['professional_id'],
+        name: json['name'],
+        sex: json['sex'],
+        birthdate: json['birthdate'],
+        motherName: json['mother_name'],
+        fatherName: json['father_name'],
+        diagnose: json['diagnose'],
+        createdAt: json['createdAt'],
+        appointments: List<Appointment>.from(
+            json["appointments"].map((x) => Appointment.fromJson(x))),
+      );
+
+  static List<PatientModel> fromJsonList(List<dynamic> jsonList) {
+    return jsonList
+        .map((json) => PatientModel.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "professional_id": professionalId,
+        "name": name,
+        "sex": sex,
+        "diagnose": diagnose,
+        "birthdate": birthdate,
+        "motherName": motherName,
+        "fatherName": fatherName,
+        "createdAt": createdAt,
+        "appointments":
+            List<dynamic>.from(appointments!.map((x) => x.toJson())),
+      };
+
+  PatientModel copyWith({
     String? name,
     String? diagnose,
     String? birthdate,
@@ -40,7 +71,7 @@ class Patient {
     String? motherName,
     String? fatherName,
   }) {
-    return Patient(
+    return PatientModel(
       name: name ?? this.name,
       diagnose: diagnose ?? this.diagnose,
       birthdate: birthdate ?? this.birthdate,
@@ -57,36 +88,6 @@ class Patient {
     }
 
     return null;
-  }
-
-  factory Patient.fromJson(Map<String, dynamic> json) => Patient(
-        id: json['id'],
-        professional_Id: json['professional_id'],
-        workplaceID: json['workplace_id'],
-        name: json['name'],
-        sex: json['sex'],
-        birthdate: json['birthdate'],
-        motherName: json['mother_name'],
-        fatherName: json['father_name'],
-        diagnose: json['diagnose'],
-        createdAt: json['createdAt'],
-        deleted: json['deleted'],
-      );
-
-  String toJSON() {
-    return jsonEncode(<String, dynamic>{
-      "id": id,
-      "professional_id": professional_Id,
-      "workplace_id": workplaceID,
-      "name": name,
-      "sex": sex,
-      "birthdate": birthdate,
-      "mother_name": motherName,
-      "father_name": fatherName,
-      "diagnose": diagnose,
-      if (createdAt != null) "createdAt": createdAt,
-      if (deleted != null) "deleted": deleted
-    });
   }
 
   String convertBirthdate(original) {

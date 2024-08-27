@@ -1,10 +1,4 @@
-import 'dart:convert';
-
 import 'package:prontuario_flutter/infra/models/workplace.dart';
-
-UserModel welcomeFromJson(String str) => UserModel.fromJson(json.decode(str));
-
-String welcomeToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   String? id;

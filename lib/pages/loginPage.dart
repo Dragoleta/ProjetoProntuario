@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/components/text_formField.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/api/api_status.dart';
-import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
 import 'package:prontuario_flutter/infra/api/user_services.dart';
-import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 import 'package:prontuario_flutter/infra/view_models/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
-  final LocalStorage localStorage;
-
-  const LoginPage({super.key, required this.localStorage});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -22,11 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   late UserModel userFromLocalDB;
   String _userEmail = "";
   late String userPassword;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void _loginUserCall() async {
     var response = await UserServices.loginUser('jorge@example.com', '1234');
@@ -42,13 +33,6 @@ class _LoginPageState extends State<LoginPage> {
       context.read<UserViewModel>().setAuthToken(response.response);
       Navigator.of(context).pushReplacementNamed('/workplaces');
     }
-  }
-
-  Future<void> _setActiveUser() async {
-    UserModel? user = await whoAmI(widget.localStorage.getActiveAuthToken());
-
-    widget.localStorage.setCurrentProfessional(user!);
-    return;
   }
 
   @override

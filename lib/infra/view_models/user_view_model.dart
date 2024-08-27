@@ -3,21 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/infra/api/api_status.dart';
 import 'package:prontuario_flutter/infra/api/user_services.dart';
+import 'package:prontuario_flutter/infra/models/default_error.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
-import 'package:prontuario_flutter/infra/models/user_error.dart';
 import 'package:prontuario_flutter/infra/models/workplace.dart';
 
 class UserViewModel extends ChangeNotifier {
   bool _loading = false;
   UserModel? _user;
-  UserError? _userError;
+  DefaultError? _userError;
   String? _authToken;
   Workplace? _selectedWorkplace;
 
   bool get loading => _loading;
   UserModel? get user => _user;
   String? get authToken => _authToken;
-  UserError? get userError => _userError;
+  DefaultError? get userError => _userError;
   Workplace? get selectedWorkplace => _selectedWorkplace;
 
   setLoading(bool loading) async {
@@ -33,7 +33,7 @@ class UserViewModel extends ChangeNotifier {
     _user = user;
   }
 
-  setUserError(UserError userError) {
+  setUserError(DefaultError userError) {
     _userError = userError;
   }
 
@@ -59,7 +59,7 @@ class UserViewModel extends ChangeNotifier {
       setUser(user);
     }
     if (response is Failure) {
-      UserError userError = UserError(
+      DefaultError userError = DefaultError(
         code: response.code,
         message: response.errorResponse,
       );
