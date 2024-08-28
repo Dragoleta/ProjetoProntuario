@@ -1,116 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/components/add_patient_form.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
-import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
+import 'package:prontuario_flutter/infra/api/api_status.dart';
+import 'package:prontuario_flutter/infra/api/patient_services.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
-import 'package:prontuario_flutter/infra/models/workplace.dart';
+import 'package:prontuario_flutter/infra/view_models/user_view_model.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:provider/provider.dart';
 
-class AddPatientPage extends StatefulWidget {
-  final LocalStorage localStorage;
-
-  const AddPatientPage({super.key, required this.localStorage});
+class AddPatientPageV3 extends StatefulWidget {
+  const AddPatientPageV3({super.key});
 
   @override
-  State<AddPatientPage> createState() => _AddPatientPageState();
+  State<AddPatientPageV3> createState() => _AddPatientPageV3State();
 }
 
-class _AddPatientPageState extends State<AddPatientPage> {
+class _AddPatientPageV3State extends State<AddPatientPageV3> {
+  final formKey = GlobalKey<FormState>();
+  var model = PatientModel();
   @override
   Widget build(BuildContext context) {
-    var currentProfessional = widget.localStorage.getCurrentProfessional();
-    Workplace? workplace = widget.localStorage.getCurrentWorkplace();
+    String workplaceID = context.watch<UserViewModel>().selectedWorkplace!.id!;
+    String authToken = context.watch<UserViewModel>().authToken!;
 
-    List patientFields = Patient().getPatientsList();
-
-    Patient toBePatient = Patient(
-        workplaceID: workplace?.id, professional_Id: currentProfessional?.id);
-    widget.localStorage.setPatientCreation(toBePatient);
     return Scaffold(
       appBar: customAppBar(
         context,
-        actionButtonFuntion: () async {
-          setState(() {});
-        },
-        appbarTitle: 'Add patient',
-        iconType: 0,
+        actionButtonFuntion: () {},
+        appbarTitle: ADD_PATIENT,
+        iconType: 3,
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: patientFields.length,
-              itemBuilder: (BuildContext context, int index) {
-                return AddPatientCard(
-                    currentField: patientFields[index].toString().toLowerCase(),
-                    localStorage: widget.localStorage);
-              },
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            AddPatientForm(
+              formkey: formKey,
+              patientModel: model,
+              onChanged: (value) => setState(() {
+                model = value;
+              }),
             ),
-          ),
-          ElevatedButton(
-              child: Text(CONTINUE),
-              onPressed: () {
-                Patient? patient = widget.localStorage.getPatientCreation();
+            ElevatedButton(
+                onPressed: () async {
+                  if (model.valid == false) {
+                    return;
+                  }
 
-                Navigator.of(context).pushNamed('/patients');
-                setState(() {});
-              })
-        ],
-      ),
-    );
-  }
-}
+                  var response = await PatientServices.createPatient(
+                      model, workplaceID, authToken);
 
-class AddPatientCard extends StatelessWidget {
-  final String currentField;
-  final LocalStorage localStorage;
-  const AddPatientCard(
-      {super.key, required this.currentField, required this.localStorage});
+                  if (response is Success) {
+                    UserViewModel().getUser();
+                    Navigator.of(context).pop();
+                  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 10, 8, 4),
-      child: TextField(
-        onChanged: (e) {
-          setToPatient(currentField, e, localStorage);
-        },
-        onSubmitted: (e) {
-          setToPatient(currentField, e, localStorage);
-        },
-        style: TextStyle(fontSize: 18, color: Colors.grey[900]),
-        cursorColor: Colors.black87,
-        decoration: InputDecoration(
-          labelText: currentField,
-          filled: true,
-          fillColor: Colors.white,
-          isDense: true,
-          labelStyle: const TextStyle(fontSize: 18, color: Colors.black87),
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.purpleAccent, width: 0.0),
-              borderRadius: BorderRadius.all(Radius.circular(20))),
+                  if (response is Failure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(response.errorResponse)),
+                    );
+                  }
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                      Theme.of(context).colorScheme.primary),
+                ),
+                child: Text(
+                  'Save',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ))
+          ],
         ),
       ),
     );
-  }
-
-  void setToPatient(
-      String currentField, String text, LocalStorage localStorage) {
-    Patient? doingPatient = localStorage.getPatientCreation();
-
-    if (currentField == 'name') {
-      doingPatient?.name = text;
-    } else if (currentField == 'sex') {
-      doingPatient!.sex = text;
-    } else if (currentField == 'age') {
-      doingPatient!.birthdate = text;
-    } else if (currentField == 'diagnose') {
-      doingPatient!.diagnose = text;
-    } else if (currentField == "mother's name") {
-      doingPatient!.motherName = text;
-    } else if (currentField == "father's name") {
-      doingPatient!.fatherName = text;
-    }
-    localStorage.setPatientCreation(doingPatient!);
   }
 }

@@ -49,17 +49,18 @@ class PatientModel {
   }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "professional_id": professionalId,
+        if (id != null) "id": id,
+        if (professionalId != null) "professional_id": professionalId,
         "name": name,
         "sex": sex,
         "diagnose": diagnose,
         "birthdate": birthdate,
         "motherName": motherName,
         "fatherName": fatherName,
-        "createdAt": createdAt,
-        "appointments":
-            List<dynamic>.from(appointments!.map((x) => x.toJson())),
+        if (createdAt != null) "createdAt": createdAt,
+        "appointments": appointments != null
+            ? List<dynamic>.from(appointments!.map((x) => x.toJson()))
+            : []
       };
 
   PatientModel copyWith({

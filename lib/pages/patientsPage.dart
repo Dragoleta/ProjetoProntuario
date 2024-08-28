@@ -17,13 +17,25 @@ class PatientsPage extends StatefulWidget {
 class _PatientsPageState extends State<PatientsPage> {
   late UserViewModel userViewModel;
   late PatientViewModel patientViewModel;
+  bool _isDataLoaded = false;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     super.didChangeDependencies();
     userViewModel = context.watch<UserViewModel>();
     patientViewModel = context.watch<PatientViewModel>();
-    patientViewModel.getPatients(userViewModel.authToken!);
+    if (!_isDataLoaded) {
+      _loadData();
+    }
+  }
+
+  Future<void> _loadData() async {
+    await patientViewModel.getPatients(userViewModel.authToken!);
+    if (userViewModel.userError == null) {
+      setState(() {
+        _isDataLoaded = true;
+      });
+    }
   }
 
   @override
@@ -64,7 +76,8 @@ class _PatientsPageState extends State<PatientsPage> {
           cardTitle: userView.selectedWorkplace!.patients[index].name,
           gestureOnTap: () async {
             PatientModel patient = patientViewModel.patientList!.firstWhere(
-              (p) => p.id == userView.selectedWorkplace!.patients[index].id,
+              (patient) =>
+                  patient.id == userView.selectedWorkplace!.patients[index].id,
               orElse: () => throw Exception('Patient not found'),
             );
             patientViewModel.setPatient(patient);
