@@ -1,14 +1,14 @@
 class Appointment {
-  String id;
+  String? id;
   String text;
   String appointmentDate;
-  String createdAt;
+  String? createdAt;
 
   Appointment({
-    required this.id,
+    this.id,
     required this.text,
     required this.appointmentDate,
-    required this.createdAt,
+    this.createdAt,
   });
 
   factory Appointment.fromJson(Map<String, dynamic> json) => Appointment(
@@ -19,9 +19,9 @@ class Appointment {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        if (id != null) "_id": id,
         "text": text,
         "appointment_date": appointmentDate,
-        "createdAt": createdAt,
+        if (createdAt != null) "createdAt": createdAt,
       };
 }

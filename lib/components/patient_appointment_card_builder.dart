@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prontuario_flutter/infra/api/api_status.dart';
 import 'package:prontuario_flutter/infra/api/appointment_services.dart';
 import 'package:prontuario_flutter/infra/models/appointment.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
@@ -13,13 +14,16 @@ patientAppointmentCardBuilder({
   PatientModel? currentPatient = patientViewModel.selectedPatient;
 
   selectAppointment(Appointment appointment) {
-    print("Banana hit the button");
     patientViewModel.setAppointment(appointment);
     Navigator.of(context).pushNamed("/patients/patient/appointment");
   }
 
-  deleteAppointment(String appointmentID) async {
-    await AppointmentServices.deleteAppointment(appointmentID, authToken);
+  deleteAppointment(String appointmentID, String patientID) async {
+    var response = await AppointmentServices.deleteAppointment(
+        appointmentID, patientID, authToken);
+    if (response is Success) {
+      patientViewModel.getPatients(authToken, bypass: true);
+    }
   }
 
   return ListView.builder(
@@ -30,7 +34,7 @@ patientAppointmentCardBuilder({
             appointment: currentPatient.appointments![index],
             cardOnPress: () =>
                 selectAppointment(currentPatient.appointments![index]),
-            iconOnPress: () =>
-                deleteAppointment(currentPatient.appointments![index].id),
+            iconOnPress: () => deleteAppointment(
+                currentPatient.appointments![index].id!, currentPatient.id!),
           ));
 }
