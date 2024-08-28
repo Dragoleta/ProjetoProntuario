@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
 import 'package:prontuario_flutter/infra/models/appointment.dart';
 
@@ -90,13 +89,6 @@ class PatientModel {
     return null;
   }
 
-  String convertBirthdate(original) {
-    DateTime originalDate = DateTime.parse(original);
-
-    String formattedDate = DateFormat('dd/MM/yyyy').format(originalDate);
-    return formattedDate;
-  }
-
   List getPatientsList() => [
         NAME,
         SEX,
@@ -109,7 +101,7 @@ class PatientModel {
   List getValues() => [
         name,
         sex,
-        convertBirthdate(birthdate),
+        birthdate,
         diagnose,
         motherName,
         fatherName,
