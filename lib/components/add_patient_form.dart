@@ -6,8 +6,8 @@ import 'package:prontuario_flutter/infra/models/patient.dart';
 
 class AddPatientForm extends StatefulWidget {
   final GlobalKey<FormState> formkey;
-  final ValueChanged<Patient> onChanged;
-  final Patient patientModel;
+  final ValueChanged<PatientModel> onChanged;
+  final PatientModel patientModel;
 
   const AddPatientForm(
       {super.key,

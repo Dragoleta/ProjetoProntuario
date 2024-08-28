@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/components/patient_appointment_card_builder.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
-import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
-import 'package:prontuario_flutter/pages/patientPage.dart';
+import 'package:prontuario_flutter/infra/view_models/patient_view_model.dart';
+import 'package:prontuario_flutter/infra/view_models/user_view_model.dart';
 import 'package:prontuario_flutter/widgets/appbar.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PatientProfile extends StatefulWidget {
-  final LocalStorage localStorage;
-  const PatientProfile({super.key, required this.localStorage});
+  const PatientProfile({super.key});
 
   @override
   State<PatientProfile> createState() => _PatientProfileState();
@@ -17,14 +17,48 @@ class PatientProfile extends StatefulWidget {
 
 class _PatientProfileState extends State<PatientProfile> {
   int _selectedIndex = 0;
-  late Patient currentPatient;
+  late PatientModel currentPatient;
   late List<Widget> _pages;
+  late UserViewModel userViewModel;
+  late PatientViewModel patientViewModel;
 
   @override
-  void initState() {
-    super.initState();
-    currentPatient = widget.localStorage.getCurrentPatient()!;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    userViewModel = context.watch<UserViewModel>();
+    patientViewModel = context.watch<PatientViewModel>();
+    currentPatient = patientViewModel.selectedPatient!;
     _pages = _buildPages();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: customAppBar(
+        context,
+        actionButtonFuntion: () {},
+        appbarTitle: PATIENT_PROFILE,
+        iconType: 3,
+      ),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              tooltip: NEW_APPOINTMENT,
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamed('/patients/patient/addAppointment');
+              },
+            )
+          : null,
+      bottomNavigationBar: myBottomNavBar(),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
+    );
   }
 
   List<Widget> _buildPages() {
@@ -32,7 +66,11 @@ class _PatientProfileState extends State<PatientProfile> {
       Column(
         children: [
           Expanded(
-            child: patientAppointmentCardBuilder(widget.localStorage),
+            child: patientAppointmentCardBuilder(
+              context: context,
+              patientViewModel: patientViewModel,
+              authToken: userViewModel.authToken!,
+            ),
           ),
         ],
       ),
@@ -81,34 +119,30 @@ class _PatientProfileState extends State<PatientProfile> {
       ],
     );
   }
+}
+
+class PatientInfo extends StatelessWidget {
+  final PatientModel? currentPatient;
+
+  const PatientInfo({
+    super.key,
+    required this.currentPatient,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(
-        context,
-        actionButtonFuntion: () {},
-        appbarTitle: PATIENT_PROFILE,
-        iconType: 3,
-      ),
-      floatingActionButton: _selectedIndex == 0
-          ? FloatingActionButton(
-              tooltip: NEW_APPOINTMENT,
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-              onPressed: () {
-                Navigator.of(context)
-                    .pushNamed('/patients/patient/addAppointment');
-              },
-            )
-          : null,
-      bottomNavigationBar: myBottomNavBar(),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _pages,
-      ),
+    // Size size = MediaQuery.of(context).size;
+    List patientFields = currentPatient!.getPatientsList();
+    var test = currentPatient?.getValues();
+    return ListView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: 6,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Text(patientFields[index] + ":"),
+          subtitle: Text(test?[index] ?? "Not found"),
+        );
+      },
     );
   }
 }

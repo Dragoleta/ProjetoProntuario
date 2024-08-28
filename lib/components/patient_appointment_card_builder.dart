@@ -1,41 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:prontuario_flutter/config/langs/ptbr.dart';
-import 'package:prontuario_flutter/infra/api/history_api_caller.dart';
-import 'package:prontuario_flutter/infra/localstorage/local_storage.dart';
-import 'package:prontuario_flutter/infra/models/history.dart';
+import 'package:prontuario_flutter/infra/api/appointment_services.dart';
+import 'package:prontuario_flutter/infra/models/appointment.dart';
 import 'package:prontuario_flutter/infra/models/patient.dart';
-import 'package:prontuario_flutter/infra/models/workplace.dart';
+import 'package:prontuario_flutter/infra/view_models/patient_view_model.dart';
 import 'package:prontuario_flutter/widgets/history_card.dart';
 
-FutureBuilder<List<PatientHistory>?> patientAppointmentCardBuilder(
-    LocalStorage storage) {
-  Workplace? workplace = storage.getCurrentWorkplace();
-  Patient? currentPatient = storage.getCurrentPatient();
-  var token = storage.getActiveAuthToken();
+patientAppointmentCardBuilder({
+  required PatientViewModel patientViewModel,
+  required String authToken,
+  required BuildContext context,
+}) {
+  PatientModel? currentPatient = patientViewModel.selectedPatient;
 
-  return FutureBuilder<List<PatientHistory>?>(
-    future: getPatientHistory(token, workplace?.id),
-    builder: (context, AsyncSnapshot<List<PatientHistory>?> snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const CircularProgressIndicator();
-      } else if (snapshot.hasData) {
-        if (snapshot.data == null) {
-          return Text(NO_APPOINTMENTS);
-        }
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: snapshot.data?.length,
-          itemBuilder: (context, index) {
-            return PatientHistoryCard(
-              storage: storage,
-              patient: currentPatient!,
-              history: snapshot.data![index],
-            );
-          },
-        );
-      } else {
-        return Text(NO_APPOINTMENTS);
-      }
-    },
-  );
+  selectAppointment(Appointment appointment) {
+    print("Banana hit the button");
+    patientViewModel.setAppointment(appointment);
+    Navigator.of(context).pushNamed("/patients/patient/appointment");
+  }
+
+  deleteAppointment(String appointmentID) async {
+    await AppointmentServices.deleteAppointment(appointmentID, authToken);
+  }
+
+  return ListView.builder(
+      shrinkWrap: true,
+      itemCount: currentPatient!.appointments!.length,
+      itemBuilder: (contexty, index) => historyCard(
+            context: contexty,
+            appointment: currentPatient.appointments![index],
+            cardOnPress: () =>
+                selectAppointment(currentPatient.appointments![index]),
+            iconOnPress: () =>
+                deleteAppointment(currentPatient.appointments![index].id),
+          ));
 }
