@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prontuario_flutter/components/text_formField.dart';
 import 'package:prontuario_flutter/config/langs/ptbr.dart';
-import 'package:prontuario_flutter/infra/api/user_api_caller.dart';
+import 'package:prontuario_flutter/infra/api/api_status.dart';
+import 'package:prontuario_flutter/infra/api/user_services.dart';
 import 'package:prontuario_flutter/infra/models/user.dart';
 
 class AccountCreationPage extends StatefulWidget {
@@ -86,8 +87,8 @@ class _AccountCreationPageState extends State<AccountCreationPage> {
                         SnackBar(content: Text(CREATING_USER)),
                       );
 
-                      var res = await createUser(model);
-                      if (res == false) {
+                      var res = await UserServices.createUser(model);
+                      if (res is Failure) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(Generic_error)),
                         );

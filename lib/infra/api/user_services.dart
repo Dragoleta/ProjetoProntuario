@@ -30,7 +30,7 @@ class UserServices {
     }
   }
 
-  static Future<Object> createPatient(UserModel user) async {
+  static Future<Object> createUser(UserModel user) async {
     try {
       Uri url = Uri.parse('${dotenv.env['API_URL']}/user/create_user');
 
