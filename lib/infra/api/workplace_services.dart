@@ -12,7 +12,7 @@ class WorkplaceServices {
     try {
       Uri url = Uri.parse('${dotenv.env['API_URL']}/workplace/add_workplace');
 
-      var a = placeToCreate.toJson();
+      var workplace = placeToCreate.toJson();
 
       http.Response response = await http.post(
         url,
@@ -20,7 +20,7 @@ class WorkplaceServices {
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $authToken",
         },
-        body: jsonEncode(a),
+        body: jsonEncode(workplace),
       );
       if (201 != response.statusCode) {
         return Failure(code: INVALID_FORMAT, errorResponse: "Invalid Format");
