@@ -77,7 +77,7 @@ class _AppointmentPageState extends State<AppointmentPage> {
                 WidgetStatePropertyAll(Theme.of(context).colorScheme.primary)),
         onPressed: () async {
           bool response = await AppointmentServices.updateAppointment(
-              currentHistory.id, currentHistory.text, authToken);
+              currentHistory.id!, currentHistory.text, authToken);
 
           if (response is Failure) {
             ScaffoldMessenger.of(context).showSnackBar(

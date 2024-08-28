@@ -4,7 +4,7 @@ import 'package:prontuario_flutter/infra/api/api_status.dart';
 import 'package:prontuario_flutter/utils/constants.dart';
 
 class PatientServices {
-  static Future<Object> getPatients(String authToken) async {
+  static Future<Object> getPatientsFromAPI(String authToken) async {
     try {
       Uri url = Uri.parse('${dotenv.env['API_URL']}/patient/get_all_patients');
 
